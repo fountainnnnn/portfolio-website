@@ -78,3 +78,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   type();
 });
+
+
+// Custom scroll with slower animation
+function smoothScrollTo(targetY, duration = 1200) { // 1200ms = slower
+  const startY = window.scrollY;
+  const diff = targetY - startY;
+  let start;
+
+  function step(timestamp) {
+    if (!start) start = timestamp;
+    const time = timestamp - start;
+    const percent = Math.min(time / duration, 1);
+
+    window.scrollTo(0, startY + diff * percent);
+
+    if (time < duration) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+// Example: scroll to next section slower
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    const next = document.querySelector(".section:nth-of-type(2)");
+    if (next) {
+      smoothScrollTo(next.offsetTop, 1200); // 1s
+    }
+  }
+});
