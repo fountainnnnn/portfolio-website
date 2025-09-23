@@ -2,7 +2,7 @@
 html {
   margin: 0;
   padding: 0;
-  font-size: 20px;
+  font-size: 20px;           /* was 19px */
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
   overflow-y: auto;
@@ -10,6 +10,7 @@ html {
 body { margin: 0; padding: 0; height: 100%; }
 
 /* ====== NAVBAR ====== */
+/* Default (desktop/tablet) = your current styles */
 .navbar {
   z-index: 1000;
   font-size: 1.2rem;
@@ -17,12 +18,24 @@ body { margin: 0; padding: 0; height: 100%; }
   border-radius: 15px;
   margin: 20px auto;
   width: 90%;
-  padding: 14px 28px;
+  padding: 10px 20px;
   background: rgba(255, 255, 255, 0.97);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.3s ease;
 }
-.navbar .nav-link { margin-left: 1.5rem; font-weight: 500; }
+
+/* Mobile: stick at the very top, full width */
+@media (max-width: 768px) {
+  .navbar {
+    position: relative;   /* just flows at top */
+    top: 0;
+    margin: 0;
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;     /* optional: remove shadow for flat look */
+  }
+}
+
 
 /* ====== SECTIONS ====== */
 .section {
@@ -32,92 +45,133 @@ body { margin: 0; padding: 0; height: 100%; }
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px 6%;
+  padding: 50px 5%;
 }
 .section-title {
-  font-size: 2.8rem;
+  font-size: 2.6rem;         /* was 2.4rem */
   font-weight: 600;
-  margin-bottom: 35px;
+  margin-bottom: 25px;
   text-align: center;
 }
-.section p { font-size: 1.15rem; line-height: 1.65; font-weight: 400; }
+.section p { font-size: 1.2rem; line-height: 1.6; font-weight: 400; } /* was 1.1rem */
 
 /* ====== HERO ====== */
 .hero-text { padding-left: 2%; }
 .hero-photo { display: flex; justify-content: flex-end; align-items: center; }
-.hero-img { max-width: 360px; border-radius: 50%; object-fit: cover; }
-#typewriter { border-right: 3px solid #000; animation: blink 0.8s step-end infinite; white-space: pre-wrap; }
+.hero-img {
+  width: 80%;           /* takes up 80% of its column */
+  max-width: 400px;     /* but never bigger than 400px */
+  border-radius: 50%;
+  object-fit: cover;
+  height: auto;         /* keeps aspect ratio */
+}
+
+#typewriter { border-right: 2px solid #000; animation: blink 0.8s step-end infinite; white-space: pre-wrap; }
 @keyframes blink { from, to { border-color: transparent } 50% { border-color: black; } }
 
-/* ====== PROJECTS ===== */
-/* Whole Projects block = full viewport */
+/* ====== PROJECTS ====== */
 #projects {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   scroll-snap-align: start;
-  padding-top: 100px;   /* adjust to match navbar height */
+  padding-top: 80px;
   box-sizing: border-box;
 }
 
-/* Heading */
 #projects .section-title {
-  flex: 0 0 auto;       /* take only natural height */
-  margin-bottom: 40px;
+  flex: 0 0 auto;
+  margin-bottom: 25px;
   text-align: center;
-    scroll-snap-align: none;
+  scroll-snap-align: none;
+  position: relative;
+  top: 10vh;
 }
 
-/* Project 1 grows to fill remaining viewport space */
 #projects .project-section:first-of-type {
-  flex: 1;              /* stretch into all remaining space */
-  min-height: 80vh;        /* stop auto-expansion */
+  flex: 1;
+  min-height: 80vh;
   display: flex;
   align-items: center;
-  padding: 0 60px;
   box-sizing: border-box;
+    padding: 40px;
   scroll-snap-align: none;
 }
 
-/* Project 2+ still each take full screen */
 #projects .project-section:not(:first-of-type) {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 60px;
+  padding: 40px;
   scroll-snap-align: start;
 }
 
- 
-
-
-.project-text { display: flex; flex-direction: column; justify-content: center; }
-.project-text h3 { font-size: 2rem; font-weight: 600; margin-bottom: 20px; }
-.project-text p { font-size: 1rem; margin-bottom: 20px; }
+.project-text h3 { font-size: 1.8rem; margin-bottom: 15px; }  /* was 1.6rem */
+.project-text p { font-size: 1.1rem; margin-bottom: 12px; }   /* was 1rem */
 
 /* ====== SKILLS ====== */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 35px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 25px;
   justify-items: center;
   align-items: center;
-  padding: 25px;
+  padding: 20px;
 }
-.skill img { width: 85px; margin-bottom: 12px; object-fit: contain; }
-.skill p { font-size: 1.1rem; font-weight: 500; margin: 0; }
+.skill img { width: 70px; margin-bottom: 10px; object-fit: contain; }
+.skill p { font-size: 1.1rem; font-weight: 500; margin: 0; } /* was 1rem */
 
 /* ====== CONTACT + FOOTER ====== */
 .contact-footer-wrapper {
   min-height: 100vh;
-  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  scroll-snap-align: start;
 }
-#contact { flex: 0 0 auto; padding: 2rem 0; }
-.site-footer { flex: 1; background: #111; color: #fff; padding: 20px 0; text-align: center; }
+#contact {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  min-height: 0;
+}
+.site-footer {
+  flex: 0 0 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 1.1rem;         /* was 1rem */
+}
 
 /* ====== RESPONSIVE ====== */
 @media (max-width: 768px) {
-  .project-section { padding: 30px 0; }
+  .project-section { padding: 20px 0; }
+}
+
+/* ====== RESPONSIVE ====== */
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  /* Shrink text on mobile */
+  html { font-size: 16px; }
+
+  .navbar { font-size: 1rem; margin: 0; width: 100%; border-radius: 0; }
+  .section-title { font-size: 2rem; }
+  .section p { font-size: 1rem; }
+
+  .project-text h3 { font-size: 1.4rem; }
+  .project-text p { font-size: 0.9rem; }
+
+  .skill p { font-size: 0.9rem; }
+  .site-footer { font-size: 0.9rem; }
+
+  /* === Navbar + Hero together = 100vh === */
+  .hero-section {
+    min-height: calc(100vh - var(--navbar-height, 60px));
+    padding-top: 0;
+  }
+  .navbar {
+    --navbar-height: 60px; /* adjust if your mobile navbar is taller/shorter */
+  }
 }
