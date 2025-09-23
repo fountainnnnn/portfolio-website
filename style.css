@@ -111,15 +111,54 @@ body { margin: 0; padding: 0; height: 100%; }
 
 /* ====== SKILLS ====== */
 .skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 25px;
-  justify-items: center;
-  align-items: center;
+  display: flex;              /* use flexbox instead of grid */
+  flex-wrap: wrap;            /* wrap into multiple rows */
+  justify-content: center;    /* center icons in each row */
+  gap: 30px;                  /* spacing between icons */
   padding: 20px;
 }
-.skill img { width: 70px; margin-bottom: 10px; object-fit: contain; }
-.skill p { font-size: 1.1rem; font-weight: 500; margin: 0; } /* was 1rem */
+
+.skill {
+  width: 140px;                /* fixed width */
+  height: 140px;               /* fixed height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;     /* true vertical centering */
+  text-align: center;
+  padding: 15px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.skill img {
+  width: 60px;
+  height: 60px;                /* consistent icon box */
+  margin-bottom: 8px;
+  object-fit: contain;         /* prevents stretching */
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.skill p {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Hover effect */
+.skill:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  background: rgba(76, 175, 239, 0.08);
+}
+
+.skill:hover img {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(76, 175, 239, 0.7));
+}
+
+
 
 /* ====== CONTACT + FOOTER ====== */
 .contact-footer-wrapper {
