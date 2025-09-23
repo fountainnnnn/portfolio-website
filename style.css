@@ -4,7 +4,7 @@ html {
   padding: 0;
   font-size: 20px;           /* was 19px */
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
   overflow-y: auto;
 }
 body { margin: 0; padding: 0; height: 100%; }
