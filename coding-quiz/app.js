@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Loading overlay
   const loadingOverlay = document.getElementById("loading-overlay");
 
-  document.getElementById("year").textContent = new Date().getFullYear();
 
   let sessionId = null;
   let questions = [];
@@ -307,4 +306,42 @@ document.addEventListener("DOMContentLoaded", () => {
     resultCard.classList.add("hidden");
     setupCard.classList.remove("hidden");
   });
+});
+
+// Typewriter animation for OpenAI Quiz App hero
+document.addEventListener("DOMContentLoaded", () => {
+  const text = "AI Generated Coding Quiz";
+  const el = document.getElementById("hero-typer");
+  let i = 0;
+  let isDeleting = false;
+
+  function typeLoop() {
+    if (!isDeleting && i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeLoop, 120);
+    } else if (isDeleting && i > 0) {
+      el.textContent = text.substring(0, i - 1);
+      i--;
+      setTimeout(typeLoop, 80);
+    } else {
+      // pause before switching mode
+      isDeleting = !isDeleting;
+      setTimeout(typeLoop, 1000);
+    }
+  }
+
+  typeLoop();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.AOS) {
+    AOS.init({
+      once: true,
+      duration: 300,
+      easing: "ease-out",
+      mirror: false,   // don’t re-trigger when scrolling up
+      anchorPlacement: "top-bottom"
+    });
+  }
 });

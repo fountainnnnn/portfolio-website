@@ -12,8 +12,6 @@ const typingIndicator = document.getElementById("typing-indicator");
 
 let sessionId = null;
 
-// year in footer
-document.getElementById("year").textContent = new Date().getFullYear();
 
 // AOS animations
 if (window.AOS) {
@@ -132,4 +130,35 @@ askForm.addEventListener("submit", async (e) => {
     hideTyping();
     showStatus("Error fetching answer: " + err.message, "danger");
   }
+});
+
+// Looping typewriter effect for hero title
+document.addEventListener("DOMContentLoaded", () => {
+  const text = "Document Q&A Chat Assistant";
+  const el = document.getElementById("hero-title");
+  let i = 0;
+  let forward = true;
+
+  function typeLoop() {
+    if (forward) {
+      if (i < text.length) {
+        el.textContent = text.substring(0, i + 1);
+        i++;
+      } else {
+        forward = false;
+        setTimeout(typeLoop, 1500); // pause at full text
+        return;
+      }
+    } else {
+      if (i > 0) {
+        el.textContent = text.substring(0, i - 1);
+        i--;
+      } else {
+        forward = true;
+      }
+    }
+    setTimeout(typeLoop, forward ? 120 : 80); // typing vs deleting speed
+  }
+
+  typeLoop();
 });
