@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mock Paper Generator</title>
+  <link rel="icon" type="image/x-icon" href="logo.png">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Custom CSS (cache-busted) -->
+  <link rel="stylesheet" href="../mock-paper-generator/styles.css?v=20250916">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Mock Paper Generator</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <h1 data-aos="fade-up">Mock Paper Generator</h1>
+      <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
+        Made by Mervin Ng
+      </p>
+      <p class="description mt-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+        Don't have enough mock paper for practice? Generate more with our Mock Paper Generator!
+      </p>
+      <a id="get-started" href="#generate" class="btn btn-accent px-4" data-aos="fade-up" data-aos-delay="400">
+        Get Started
+      </a>
+    </div>
+    <a href="#generate" class="scroll-down">↓</a>
+  </header>
+
+  <!-- MAIN -->
+  <main id="generate" class="flex-grow-1 py-5">
+    <div class="container" data-aos="fade-up">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card pastel-card shadow-sm">
+            <div class="card-body p-4">
+              <h3 class="fw-semibold mb-3 text-accent">Generate your mock paper</h3>
+              <form id="gen-form" class="gy-3">
+                <!-- File -->
+                <div class="mb-3">
+                  <label class="form-label">Upload exam paper (.pdf / .docx)</label>
+                  <input id="file-input" class="form-control" type="file" name="file" accept=".pdf,.docx" required />
+                </div>
+
+                <div class="row g-4">
+                  <!-- Number of mocks -->
+                  <div class="col-md-6">
+                    <label class="form-label">Number of new mocks (max 3)</label>
+                    <input id="num-mocks" class="form-control" type="number" name="num_mocks" min="1" max="3" value="1" />
+                  </div>
+
+                  <!-- Difficulty -->
+                  <div class="col-md-6">
+                    <label class="form-label">Difficulty</label>
+                    <div class="btn-group w-100" role="group">
+                      <input type="radio" class="btn-check" name="difficulty" id="d1" value="easy">
+                      <label class="btn btn-outline-accent" for="d1">Easy</label>
+
+                      <input type="radio" class="btn-check" name="difficulty" id="d2" value="same" checked>
+                      <label class="btn btn-outline-accent" for="d2">Same</label>
+
+                      <input type="radio" class="btn-check" name="difficulty" id="d3" value="harder">
+                      <label class="btn btn-outline-accent" for="d3">Harder</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- API key -->
+                <div class="mb-3 mt-3">
+                  <label class="form-label">OpenAI API key</label>
+                  <input class="form-control" type="password" name="openai_api_key" placeholder="Insert your API Key (recommended)" />
+                </div>
+
+                <!-- Progress -->
+                <div id="progressWrap" class="progress mb-3 d-none" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                  <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                </div>
+
+                <!-- Status -->
+                <div id="statusAlert" class="alert d-none" role="alert"></div>
+
+                <!-- Actions -->
+                <div class="d-flex align-items-center gap-3">
+                  <button type="submit" id="submit-btn" class="btn btn-accent px-4">Generate</button>
+                  <div id="download"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- FAQ -->
+  <section class="py-5 border-top" data-aos="fade-up">
+    <div class="container">
+      <h3 class="fw-semibold mb-4 text-accent text-center">Frequently Asked Questions</h3>
+      <div class="accordion" id="faqAccordion">
+
+        <!-- Q1 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1Collapse" aria-expanded="false" aria-controls="faq1Collapse">
+              Q: My questions or answers contain errors, what can I do?
+            </button>
+          </h2>
+          <div id="faq1Collapse" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: Simply try again and regenerate the mock paper. Each run may produce a different variation as the model may not be as consistent.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2Collapse" aria-expanded="false" aria-controls="faq2Collapse">
+              Q: Can I generate more than 3 mock papers at once?
+            </button>
+          </h2>
+          <div id="faq2Collapse" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: Currently, you can generate up to 3 mock papers in a single request. This ensures performance and quality of each generation.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3Collapse" aria-expanded="false" aria-controls="faq3Collapse">
+              Q: Do I need to provide my OpenAI API key?
+            </button>
+          </h2>
+          <div id="faq3Collapse" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: It’s recommended to insert your own API key for reliability, but you may proceed without one depending on availability.
+            </div>
+          </div>
+        </div>
+
+                <!-- Q4 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq4">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4Collapse" aria-expanded="false" aria-controls="faq4Collapse">
+              Q: Will my uploaded file be stored anywhere?
+            </button>
+          </h2>
+          <div id="faq4Collapse" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: No, uploaded files are only used temporarily for generation and are not stored permanently on the server.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq5">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5Collapse" aria-expanded="false" aria-controls="faq5Collapse">
+              Q: What file formats are supported?
+            </button>
+          </h2>
+          <div id="faq5Collapse" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: Currently, you can upload <code>.pdf</code> and <code>.docx</code> files. Other formats may be added in the future.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq6">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6Collapse" aria-expanded="false" aria-controls="faq6Collapse">
+              Q: Why does it sometimes take a long time to generate?
+            </button>
+          </h2>
+          <div id="faq6Collapse" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: Processing time depends on the length and complexity of your uploaded paper. If it takes unusually long, try refreshing and submitting again.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq7">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7Collapse" aria-expanded="false" aria-controls="faq7Collapse">
+              Q: Can I edit the generated mock papers?
+            </button>
+          </h2>
+          <div id="faq7Collapse" class="accordion-collapse collapse" aria-labelledby="faq7" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: Yes, the generated ZIP file contains documents that you can open and edit freely in your preferred editor.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq8">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8Collapse" aria-expanded="false" aria-controls="faq8Collapse">
+              Q: Is there a cost to using this tool?
+            </button>
+          </h2>
+          <div id="faq8Collapse" class="accordion-collapse collapse" aria-labelledby="faq8" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              A: The tool itself is free to use, but if you use your own OpenAI API key, OpenAI will charge you based on their usage rates.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- CONTACT -->
+<section class="py-5 text-center border-top" data-aos="fade-up">
+  <div class="container">
+    <h5 class="mb-3">Got any feedback/suggestions? Let's connect!</h5>
+    <a href="https://www.linkedin.com/in/ngyuhang/" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="btn btn-linkedin d-inline-flex align-items-center gap-2 px-4 py-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 
+                 0 16 .513 16 1.146v13.708c0 .633-.526 
+                 1.146-1.175 1.146H1.175C.526 16 0 
+                 15.487 0 14.854V1.146zm4.943 
+                 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 
+                 0 1.358-.554 1.358-1.248-.015-.709-.521-1.248-1.342-1.248-.822 
+                 0-1.358.54-1.358 1.248 0 .694.521 
+                 1.248 1.327 1.248h.015zm4.908 
+                 8.212V9.359c0-.216.016-.432.08-.586.174-.431.571-.878 
+                 1.237-.878.873 0 1.222.662 1.222 
+                 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 
+                 0-1.845.7-2.165 1.193v.025h-.016a5.54 
+                 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 
+                 0 7.225 0 7.225h2.4z"/>
+      </svg>
+      Connect on LinkedIn
+    </a>
+  </div>
+</section>
+
+
+  <!-- FOOTER -->
+  <footer class="py-3 text-center">
+    <div class="container small">
+      © <span id="year"></span> Mock Paper Generator. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Scripts (cache-busted) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+  <script src="../mock-paper-generator/app.js?v=20250916" defer></script>
+</body>
+</html>
