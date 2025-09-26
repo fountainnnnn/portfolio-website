@@ -126,13 +126,20 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
 
+        // Force plain text paste
+        el.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+          document.execCommand("insertText", false, text);
+        });
+
         const resize = () => {
           const span = document.createElement("span");
           span.style.visibility = "hidden";
           span.style.position = "absolute";
           span.style.whiteSpace = "pre";
           span.style.font = getComputedStyle(el).font;
-          span.textContent = el.textContent || "___";
+          span.textContent = el.textContent || "";
           document.body.appendChild(span);
           el.style.width = span.offsetWidth + 20 + "px";
           span.remove();
