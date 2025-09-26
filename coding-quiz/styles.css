@@ -125,7 +125,6 @@ body {
   background: var(--accent);
   color: white;
 }
-
 #start-btn:hover {
   background: rgb(63, 0, 157);
 }
@@ -205,6 +204,7 @@ body {
   transition: background 0.2s ease;
 }
 .dragdrop-zone.dragover { background: #eef2ff; }
+
 .draggable {
   padding: 0.6rem 1rem;
   border: 1px solid #e5e7eb;
@@ -221,6 +221,7 @@ body {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
+
 .drag-placeholder {
   border: 2px dashed var(--accent);
   border-radius: 10px;

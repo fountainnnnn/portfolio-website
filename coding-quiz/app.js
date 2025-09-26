@@ -89,6 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.classList.add("hidden");
     dragActions.classList.add("hidden");
 
+    // Remove lingering next button
+    const oldNext = document.getElementById("next-btn");
+    if (oldNext) oldNext.remove();
+
     // Question text
     questionText.textContent = `Q${currentIndex + 1}/${questions.length}: ${q.question || ""}`;
 
@@ -297,10 +301,19 @@ document.addEventListener("DOMContentLoaded", () => {
         feedbackEl.classList.remove("hidden");
         feedbackEl.className = "feedback success";
         feedbackEl.textContent = `✅ Correct! ${data.explanation}`;
-        setTimeout(() => {
+
+        // Show Next button instead of auto-advancing
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "btn btn-success mt-2";
+        nextBtn.textContent = "Next Question";
+        nextBtn.id = "next-btn";
+        nextBtn.addEventListener("click", () => {
           currentIndex++;
           showQuestion();
-        }, 1500);
+        });
+
+        feedbackEl.appendChild(document.createElement("br"));
+        feedbackEl.appendChild(nextBtn);
       } else {
         attemptedWrong = true;
         if (clickedBtn) clickedBtn.classList.add("incorrect");
@@ -370,32 +383,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-// Inject blank styling
-const style = document.createElement("style");
-style.textContent = `
-  .blank {
-    display: inline-block;
-    min-width: 40px;
-    border-bottom: 2px solid #aaa;
-    background: #fff;
-    color: #000;
-    padding: 0 4px;
-    margin: 0 2px;
-    white-space: nowrap;
-  }
-  .draggable {
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    background: #fafafa;
-    cursor: move;
-    border-radius: 4px;
-  }
-  .draggable:active {
-    opacity: 0.7;
-  }
-  .dragover {
-    background: #f0f0f0;
-  }
-`;
-document.head.appendChild(style);
