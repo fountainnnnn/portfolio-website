@@ -11,17 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const languageSelect = document.getElementById("language");
   const numQuestionsInput = document.getElementById("num-questions");
 
-  const quizContainer = document.getElementById("quiz-container");
-  const resultCard = document.getElementById("result-card");
-  const questionText = document.getElementById("question-text");
-  const codeBlock = document.getElementById("code-block");
-  const optionsDiv = document.getElementById("options");
-  const dragZone = document.getElementById("dragdrop-zone");
-  const dragActions = document.getElementById("dragdrop-actions");
-  const submitOrderBtn = document.getElementById("submit-order-btn");
-  const feedbackEl = document.getElementById("feedback");
-  const scoreText = document.getElementById("score-text");
-  const restartBtn = document.getElementById("restart-btn");
+  let quizContainer = document.getElementById("quiz-container");
+  let resultCard = document.getElementById("result-card");
+  let questionText = document.getElementById("question-text");
+  let codeBlock = document.getElementById("code-block");
+  let optionsDiv = document.getElementById("options");
+  let dragZone = document.getElementById("dragdrop-zone");
+  let dragActions = document.getElementById("dragdrop-actions");
+  let submitOrderBtn = document.getElementById("submit-order-btn");
+  let feedbackEl = document.getElementById("feedback");
+  let scoreText = document.getElementById("score-text");
+  let restartBtn = document.getElementById("restart-btn");
 
   // Loading overlay
   const loadingOverlay = document.getElementById("loading-overlay");
@@ -193,60 +193,10 @@ document.addEventListener("DOMContentLoaded", () => {
     placeholder.style.border = "1px dashed #aaa";
     placeholder.style.borderRadius = "4px";
 
-    function cleanupPlaceholder() {
-      const existing = dragZone.querySelector(".drag-placeholder");
-      if (existing) existing.remove();
-    }
-
-    dragZone.querySelectorAll(".draggable").forEach((el) => {
-      el.addEventListener("dragstart", (e) => {
-        dragged = el;
-        e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setData("text/plain", el.textContent);
-        setTimeout(() => {
-          el.style.display = "none";
-        }, 0);
-      });
-
-      el.addEventListener("dragend", () => {
-        el.style.display = "block";
-        dragged = null;
-        cleanupPlaceholder();
-        dragZone.classList.remove("dragover");
-      });
-    });
-
-    dragZone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dragZone.classList.add("dragover");
-      const afterEl = getDragAfterElement(dragZone, e.clientY);
-      cleanupPlaceholder();
-      if (afterEl == null) {
-        dragZone.appendChild(placeholder);
-      } else {
-        dragZone.insertBefore(placeholder, afterEl);
-      }
-    });
-
-    dragZone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      if (dragged) {
-        if (placeholder.parentNode) {
-          dragZone.insertBefore(dragged, placeholder);
-        } else {
-          dragZone.appendChild(dragged);
-        }
-        dragged.style.display = "block";
-      }
-      cleanupPlaceholder();
-    });
-
-    dragZone.addEventListener("dragleave", (e) => {
-      if (!dragZone.contains(e.relatedTarget)) {
-        cleanupPlaceholder();
-        dragZone.classList.remove("dragover");
-      }
-    });
+    // ✅ reset dragZone listeners by replacing with clone
+    const newDragZone = dragZone.cloneNode(true);
+    dragZone.parentNode.replaceChild(newDragZone, dragZone);
+    dragZone = newDragZone;
 
     function getDragAfterElement(container, y) {
       const draggableEls = [
@@ -265,6 +215,59 @@ document.addEventListener("DOMContentLoaded", () => {
         { offset: Number.NEGATIVE_INFINITY }
       ).element;
     }
+
+    dragZone.querySelectorAll(".draggable").forEach((el) => {
+      el.addEventListener("dragstart", (e) => {
+        dragged = el;
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", el.textContent);
+        setTimeout(() => {
+          el.style.display = "none";
+        }, 0);
+      });
+
+      el.addEventListener("dragend", () => {
+        el.style.display = "block";
+        dragged = null;
+        if (placeholder.parentNode) placeholder.remove();
+        dragZone.classList.remove("dragover");
+      });
+    });
+
+    dragZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dragZone.classList.add("dragover");
+      const afterEl = getDragAfterElement(dragZone, e.clientY);
+      if (!placeholder.parentNode) {
+        dragZone.appendChild(placeholder);
+      }
+      if (afterEl == null) {
+        dragZone.appendChild(placeholder);
+      } else {
+        dragZone.insertBefore(placeholder, afterEl);
+      }
+    });
+
+    dragZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (dragged) {
+        if (placeholder.parentNode) {
+          dragZone.insertBefore(dragged, placeholder);
+        } else {
+          dragZone.appendChild(dragged);
+        }
+        dragged.style.display = "block";
+      }
+      if (placeholder.parentNode) placeholder.remove();
+      dragZone.classList.remove("dragover");
+    });
+
+    dragZone.addEventListener("dragleave", (e) => {
+      if (!dragZone.contains(e.relatedTarget)) {
+        if (placeholder.parentNode) placeholder.remove();
+        dragZone.classList.remove("dragover");
+      }
+    });
   }
 
   // Submit answer
