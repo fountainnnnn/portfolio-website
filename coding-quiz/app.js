@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentIndex = 0;
   let score = 0;
   let locked = false;
+  let attemptedWrong = false; // track per-question attempts
 
   // --- Ensure dragZone never collapses
   dragZone.style.minHeight = "200px";
@@ -84,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Reset UI
     locked = false;
+    attemptedWrong = false; // reset flag for this question
     feedbackEl.classList.add("hidden");
     feedbackEl.textContent = "";
     codeBlock.classList.add("hidden");
@@ -278,7 +280,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const correct = data.correct;
       if (correct) {
-        score++;
+        if (!attemptedWrong) {
+          score++; // only reward if no wrong attempts before
+        }
         locked = true;
         if (clickedBtn) clickedBtn.classList.add("correct");
         feedbackEl.classList.remove("hidden");
@@ -289,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showQuestion();
         }, 1500);
       } else {
+        attemptedWrong = true; // mark that this question was failed once
         if (clickedBtn) clickedBtn.classList.add("incorrect");
         feedbackEl.classList.remove("hidden");
         feedbackEl.className = "feedback error";
