@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fill-in-the-blank
     if (q.type === "fill_code" && q.code_with_blanks) {
-      const codeHTML = q.code_with_blanks.replace(/___/g, () => {
+      const codeHTML = q.code_with_blanks.replace(/_{3,}/g, () => {
         return `<span class="blank" contenteditable="true" data-blank></span>`;
       });
       codeBlock.innerHTML = `<pre><code>${codeHTML}</code></pre>`;
@@ -132,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
           span.style.position = "absolute";
           span.style.whiteSpace = "pre";
           span.style.font = getComputedStyle(el).font;
-          // FIX: remove underscores, use empty string fallback
           span.textContent = el.textContent || "";
           document.body.appendChild(span);
           el.style.width = span.offsetWidth + 20 + "px";
@@ -362,3 +361,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Inject blank styling
+const style = document.createElement("style");
+style.textContent = `
+  .blank {
+    display: inline-block;
+    min-width: 40px;
+    border-bottom: 2px solid #aaa;
+    background: #fff;
+    color: #000;
+    padding: 0 4px;
+    margin: 0 2px;
+    white-space: nowrap;
+  }
+`;
+document.head.appendChild(style);
