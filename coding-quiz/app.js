@@ -89,6 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.classList.add("hidden");
     dragActions.classList.add("hidden");
 
+    // Reset submit order button state
+    submitOrderBtn.disabled = false;
+
     // Remove lingering next button
     const oldNext = document.getElementById("next-btn");
     if (oldNext) oldNext.remove();
@@ -301,6 +304,11 @@ document.addEventListener("DOMContentLoaded", () => {
         feedbackEl.classList.remove("hidden");
         feedbackEl.className = "feedback success";
         feedbackEl.textContent = `✅ Correct! ${data.explanation}`;
+
+        // Disable Submit Order button if drag_drop type
+        if (q.type === "drag_drop") {
+          submitOrderBtn.disabled = true;
+        }
 
         // Show Next button instead of auto-advancing
         const nextBtn = document.createElement("button");
