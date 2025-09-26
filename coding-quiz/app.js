@@ -1,6 +1,7 @@
 // Backend API (FastAPI running locally)
 const BACKEND_BASE_URL =
-  new URLSearchParams(location.search).get("api") || "https://crystallizedcrust-coding-quiz.hf.space";
+  new URLSearchParams(location.search).get("api") ||
+  "https://crystallizedcrust-coding-quiz.hf.space";
 
 document.addEventListener("DOMContentLoaded", () => {
   const setupCard = document.getElementById("setup-card");
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let locked = false; // prevent multiple answers after correct
 
   // --- Ensure dragZone never collapses
-  dragZone.style.minHeight = "200px"; // fixed generous height
+  dragZone.style.minHeight = "200px";
   dragZone.style.display = "flex";
   dragZone.style.flexDirection = "column";
   dragZone.style.gap = "6px";
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const codeHTML = q.code_with_blanks.replace(/___/g, () => {
         return `<span class="blank" contenteditable="true" data-blank></span>`;
       });
-      codeBlock.innerHTML = `<code>${codeHTML}</code>`;
+      codeBlock.innerHTML = `<pre><code>${codeHTML}</code></pre>`;
       codeBlock.classList.remove("hidden");
 
       const submitBtn = document.createElement("button");
@@ -115,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       optionsDiv.appendChild(submitBtn);
 
-      // Auto-expand blanks
       codeBlock.querySelectorAll("[data-blank]").forEach((el) => {
         el.addEventListener("keydown", (e) => {
           if (e.key === "Enter") {
@@ -184,9 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Drag & drop support
   function enableDragAndDrop() {
     let dragged = null;
-    let placeholder = document.createElement("div");
+    const placeholder = document.createElement("div");
     placeholder.className = "drag-placeholder";
     placeholder.style.height = "32px";
+    placeholder.style.background = "#eee";
+    placeholder.style.border = "1px dashed #aaa";
 
     function cleanupPlaceholder() {
       const existing = dragZone.querySelector(".drag-placeholder");
@@ -198,8 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dragged = el;
         setTimeout(() => el.classList.add("hidden"), 0);
       });
+
       el.addEventListener("dragend", () => {
-        dragged.classList.remove("hidden");
+        el.classList.remove("hidden");
         dragged = null;
         cleanupPlaceholder();
         dragZone.classList.remove("dragover");
@@ -217,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
       for (const target of draggables) {
         const box = target.getBoundingClientRect();
         const midpoint = box.top + box.height / 2;
-
         if (e.clientY < midpoint) {
           dragZone.insertBefore(placeholder, target);
           placed = true;
@@ -308,7 +310,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const topic = topicSelect.value;
     const difficulty = difficultySelect.value;
     const numQuestions = parseInt(numQuestionsInput.value, 10) || 10;
-
     loadQuiz(language, topic, difficulty, numQuestions);
   });
 
@@ -316,10 +317,8 @@ document.addEventListener("DOMContentLoaded", () => {
     resultCard.classList.add("hidden");
     setupCard.classList.remove("hidden");
   });
-});
 
-// Typewriter animation for hero
-document.addEventListener("DOMContentLoaded", () => {
+  // Typewriter animation for hero
   const text = "AI Generated Coding Quiz";
   const el = document.getElementById("hero-typer");
   let i = 0;
@@ -339,19 +338,16 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(typeLoop, 1000);
     }
   }
-
   typeLoop();
-});
 
-// Init AOS animations
-document.addEventListener("DOMContentLoaded", () => {
+  // Init AOS animations
   if (window.AOS) {
     AOS.init({
       once: true,
       duration: 300,
       easing: "ease-out",
       mirror: false,
-      anchorPlacement: "top-bottom"
+      anchorPlacement: "top-bottom",
     });
   }
 });
