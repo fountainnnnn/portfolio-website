@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let questions = [];
   let currentIndex = 0;
   let score = 0;
-  let locked = false; // prevent multiple answers after correct
+  let locked = false;
 
   // --- Ensure dragZone never collapses
   dragZone.style.minHeight = "200px";
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.classList.add("hidden");
     dragActions.classList.add("hidden");
 
-    // Render question text with numbering
+    // Question text with numbering
     questionText.textContent = `Q${currentIndex + 1}/${questions.length}: ${q.question || ""}`;
 
     // Fill-in-the-blank
@@ -155,8 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
         optionsDiv.appendChild(btn);
       });
     }
-    // Drag and drop
-    else if (q.type === "drag_drop" && Array.isArray(q.options)) {
+    // Drag and drop (strict check)
+    else if (q.type === "drag_drop") {
+      if (!Array.isArray(q.options) || q.options.length < 2) {
+        console.error("Invalid drag_drop question, skipping:", q);
+        currentIndex++;
+        return showQuestion();
+      }
       dragZone.classList.remove("hidden");
       dragActions.classList.remove("hidden");
 
@@ -318,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupCard.classList.remove("hidden");
   });
 
-  // Typewriter animation for hero
+  // Typewriter animation
   const text = "AI Generated Coding Quiz";
   const el = document.getElementById("hero-typer");
   let i = 0;
@@ -340,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   typeLoop();
 
-  // Init AOS animations
+  // Init AOS
   if (window.AOS) {
     AOS.init({
       once: true,
