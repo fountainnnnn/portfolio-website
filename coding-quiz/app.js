@@ -31,9 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentIndex = 0;
   let score = 0;
   let locked = false;
-  let attemptedWrong = false; // track per-question attempts
+  let attemptedWrong = false;
 
-  // --- Ensure dragZone never collapses
+  // Ensure dragZone never collapses
   dragZone.style.minHeight = "200px";
   dragZone.style.display = "flex";
   dragZone.style.flexDirection = "column";
@@ -46,12 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(`${BACKEND_BASE_URL}/generate_questions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          language,
-          topic,
-          difficulty,
-          n: numQuestions,
-        }),
+        body: JSON.stringify({ language, topic, difficulty, n: numQuestions }),
       });
 
       const data = await res.json();
@@ -85,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Reset UI
     locked = false;
-    attemptedWrong = false; // reset flag for this question
+    attemptedWrong = false;
     feedbackEl.classList.add("hidden");
     feedbackEl.textContent = "";
     codeBlock.classList.add("hidden");
@@ -94,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.classList.add("hidden");
     dragActions.classList.add("hidden");
 
-    // Question text with numbering
+    // Question text
     questionText.textContent = `Q${currentIndex + 1}/${questions.length}: ${q.question || ""}`;
 
     // Fill-in-the-blank
@@ -157,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         optionsDiv.appendChild(btn);
       });
     }
-    // Drag and drop (strict check)
+    // Drag and drop
     else if (q.type === "drag_drop") {
       if (!Array.isArray(q.options) || q.options.length < 2) {
         console.error("Invalid drag_drop question, skipping:", q);
@@ -203,13 +198,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     dragZone.querySelectorAll(".draggable").forEach((el) => {
-      el.addEventListener("dragstart", () => {
+      el.addEventListener("dragstart", (e) => {
         dragged = el;
-        setTimeout(() => el.classList.add("hidden"), 0);
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", el.textContent); // required
+        el.style.opacity = "0.5";
       });
 
       el.addEventListener("dragend", () => {
-        el.classList.remove("hidden");
+        el.style.opacity = "1";
         dragged = null;
         cleanupPlaceholder();
         dragZone.classList.remove("dragover");
@@ -221,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dragZone.classList.add("dragover");
       cleanupPlaceholder();
 
-      const draggables = [...dragZone.querySelectorAll(".draggable:not(.hidden)")];
+      const draggables = [...dragZone.querySelectorAll(".draggable:not([style*='opacity: 0.5'])")];
       let placed = false;
 
       for (const target of draggables) {
@@ -234,9 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      if (!placed) {
-        dragZone.appendChild(placeholder);
-      }
+      if (!placed) dragZone.appendChild(placeholder);
     });
 
     dragZone.addEventListener("drop", (e) => {
@@ -280,9 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const correct = data.correct;
       if (correct) {
-        if (!attemptedWrong) {
-          score++; // only reward if no wrong attempts before
-        }
+        if (!attemptedWrong) score++;
         locked = true;
         if (clickedBtn) clickedBtn.classList.add("correct");
         feedbackEl.classList.remove("hidden");
@@ -293,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showQuestion();
         }, 1500);
       } else {
-        attemptedWrong = true; // mark that this question was failed once
+        attemptedWrong = true;
         if (clickedBtn) clickedBtn.classList.add("incorrect");
         feedbackEl.classList.remove("hidden");
         feedbackEl.className = "feedback error";
@@ -374,6 +367,19 @@ style.textContent = `
     padding: 0 4px;
     margin: 0 2px;
     white-space: nowrap;
+  }
+  .draggable {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    cursor: move;
+    border-radius: 4px;
+  }
+  .draggable:active {
+    opacity: 0.7;
+  }
+  .dragover {
+    background: #f0f0f0;
   }
 `;
 document.head.appendChild(style);
