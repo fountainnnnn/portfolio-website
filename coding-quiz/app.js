@@ -1,6 +1,7 @@
 // Backend API (FastAPI running locally)
 const BACKEND_BASE_URL =
-  new URLSearchParams(location.search).get("api") || "https://crystallizedcrust-coding-quiz.hf.space";
+  new URLSearchParams(location.search).get("api") ||
+  "https://crystallizedcrust-coding-quiz.hf.space";
 
 document.addEventListener("DOMContentLoaded", () => {
   const setupCard = document.getElementById("setup-card");
@@ -22,15 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const scoreText = document.getElementById("score-text");
   const restartBtn = document.getElementById("restart-btn");
 
-  // Loading overlay
   const loadingOverlay = document.getElementById("loading-overlay");
-
 
   let sessionId = null;
   let questions = [];
   let currentIndex = 0;
-  let score = 0;
-  let locked = false; // prevent multiple answers after correct
+  let locked = false;
 
   // Load quiz
   async function loadQuiz(language, topic, difficulty, numQuestions) {
@@ -55,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionId = data.session_id;
       questions = data.questions;
       currentIndex = 0;
-      score = 0;
 
       setupCard.classList.add("hidden");
       quizContainer.classList.remove("hidden");
@@ -76,8 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const q = questions[currentIndex];
 
-    // Reset UI
-    locked = false; // reset lock per question
+    locked = false;
     feedbackEl.classList.add("hidden");
     feedbackEl.textContent = "";
     codeBlock.classList.add("hidden");
@@ -86,10 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.classList.add("hidden");
     dragActions.classList.add("hidden");
 
-    // Render question text with numbering
     questionText.textContent = `Q${currentIndex + 1}/${questions.length}: ${q.question || ""}`;
 
-    // Code block rendering
     if (q.type === "fill_code" && q.code_with_blanks) {
       const codeHTML = q.code_with_blanks.replace(/___/g, () => {
         return `<span class="blank" contenteditable="true" data-blank></span>`;
@@ -109,30 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
       optionsDiv.appendChild(submitBtn);
-
-      // Auto-expand blanks
-      codeBlock.querySelectorAll("[data-blank]").forEach((el) => {
-        el.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            submitBtn.click();
-          }
-        });
-
-        const resize = () => {
-          const span = document.createElement("span");
-          span.style.visibility = "hidden";
-          span.style.position = "absolute";
-          span.style.whiteSpace = "pre";
-          span.style.font = getComputedStyle(el).font;
-          span.textContent = el.textContent || "___";
-          document.body.appendChild(span);
-          el.style.width = span.offsetWidth + 20 + "px";
-          span.remove();
-        };
-        el.addEventListener("input", resize);
-        resize();
-      });
     } else if (q.type === "mcq" && Array.isArray(q.options)) {
       if (q.code_with_blanks) {
         codeBlock.textContent = q.code_with_blanks;
@@ -172,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Drag & drop support
   function enableDragAndDrop() {
     let dragged = null;
     let placeholder = document.createElement("div");
@@ -261,8 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const correct = data.correct;
       if (correct) {
-        score++;
-        locked = true; // 🔒 lock once correct
+        locked = true;
         if (clickedBtn) clickedBtn.classList.add("correct");
         feedbackEl.classList.remove("hidden");
         feedbackEl.className = "feedback success";
@@ -285,11 +253,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Results
-  function showResults() {
+  // Results (now calls /end_quiz)
+  async function showResults() {
     quizContainer.classList.add("hidden");
     resultCard.classList.remove("hidden");
-    scoreText.textContent = `You scored ${score} out of ${questions.length} questions.`;
+
+    try {
+      const res = await fetch(`${BACKEND_BASE_URL}/end_quiz`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: sessionId }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || data.status !== "ok") {
+        throw new Error(data.detail || data.message || "Failed to end quiz");
+      }
+
+      const total = data.score.total_questions;
+      const wrongFirst = data.score.wrong_first_try;
+      const correctFirst = total - wrongFirst;
+
+      scoreText.textContent = `You got ${correctFirst} / ${total} correct on the first try.`;
+    } catch (err) {
+      console.error("End quiz error:", err);
+      scoreText.textContent = `Error ending quiz: ${err.message}`;
+    }
   }
 
   // Events
@@ -308,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Typewriter animation for OpenAI Quiz App hero
+// Typewriter animation
 document.addEventListener("DOMContentLoaded", () => {
   const text = "AI Generated Coding Quiz";
   const el = document.getElementById("hero-typer");
@@ -325,7 +314,6 @@ document.addEventListener("DOMContentLoaded", () => {
       i--;
       setTimeout(typeLoop, 80);
     } else {
-      // pause before switching mode
       isDeleting = !isDeleting;
       setTimeout(typeLoop, 1000);
     }
@@ -340,8 +328,8 @@ document.addEventListener("DOMContentLoaded", () => {
       once: true,
       duration: 300,
       easing: "ease-out",
-      mirror: false,   // don’t re-trigger when scrolling up
-      anchorPlacement: "top-bottom"
+      mirror: false,
+      anchorPlacement: "top-bottom",
     });
   }
 });
