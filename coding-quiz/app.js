@@ -191,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     placeholder.style.height = "32px";
     placeholder.style.background = "#eee";
     placeholder.style.border = "1px dashed #aaa";
+    placeholder.style.borderRadius = "4px";
 
     function cleanupPlaceholder() {
       const existing = dragZone.querySelector(".drag-placeholder");
@@ -201,12 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
       el.addEventListener("dragstart", (e) => {
         dragged = el;
         e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setData("text/plain", el.textContent); // required
-        el.style.opacity = "0.5";
+        e.dataTransfer.setData("text/plain", el.textContent);
+        setTimeout(() => {
+          el.style.display = "none";
+        }, 0);
       });
 
       el.addEventListener("dragend", () => {
-        el.style.opacity = "1";
+        el.style.display = "block";
         dragged = null;
         cleanupPlaceholder();
         dragZone.classList.remove("dragover");
@@ -216,22 +219,13 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.addEventListener("dragover", (e) => {
       e.preventDefault();
       dragZone.classList.add("dragover");
+      const afterEl = getDragAfterElement(dragZone, e.clientY);
       cleanupPlaceholder();
-
-      const draggables = [...dragZone.querySelectorAll(".draggable:not([style*='opacity: 0.5'])")];
-      let placed = false;
-
-      for (const target of draggables) {
-        const box = target.getBoundingClientRect();
-        const midpoint = box.top + box.height / 2;
-        if (e.clientY < midpoint) {
-          dragZone.insertBefore(placeholder, target);
-          placed = true;
-          break;
-        }
+      if (afterEl == null) {
+        dragZone.appendChild(placeholder);
+      } else {
+        dragZone.insertBefore(placeholder, afterEl);
       }
-
-      if (!placed) dragZone.appendChild(placeholder);
     });
 
     dragZone.addEventListener("drop", (e) => {
@@ -242,6 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           dragZone.appendChild(dragged);
         }
+        dragged.style.display = "block";
       }
       cleanupPlaceholder();
     });
@@ -252,6 +247,24 @@ document.addEventListener("DOMContentLoaded", () => {
         dragZone.classList.remove("dragover");
       }
     });
+
+    function getDragAfterElement(container, y) {
+      const draggableEls = [
+        ...container.querySelectorAll(".draggable:not([style*='display: none'])"),
+      ];
+      return draggableEls.reduce(
+        (closest, child) => {
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+          } else {
+            return closest;
+          }
+        },
+        { offset: Number.NEGATIVE_INFINITY }
+      ).element;
+    }
   }
 
   // Submit answer
