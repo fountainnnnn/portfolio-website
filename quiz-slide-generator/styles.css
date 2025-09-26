@@ -74,19 +74,14 @@ body {
 }
 
 /* ====== HERO ====== */
-#hero {
-  text-align: center;
-}
+#hero { text-align: center; }
 #hero h1 {
   font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 800;
   color: var(--accent);
   margin-bottom: 1rem;
 }
-#hero p {
-  max-width: 650px;
-  margin: 0 auto;
-}
+#hero p { max-width: 650px; margin: 0 auto; }
 #hero-typer::after {
   content: "|";
   margin-left: 5px;
