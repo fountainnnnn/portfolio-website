@@ -31,6 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let score = 0;
   let locked = false; // prevent multiple answers after correct
 
+  // --- Ensure dragZone never collapses
+  dragZone.style.minHeight = "200px"; // fixed generous height
+  dragZone.style.display = "flex";
+  dragZone.style.flexDirection = "column";
+  dragZone.style.gap = "6px";
+
   // Load quiz
   async function loadQuiz(language, topic, difficulty, numQuestions) {
     loadingOverlay.classList.remove("hidden");
@@ -180,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let dragged = null;
     let placeholder = document.createElement("div");
     placeholder.className = "drag-placeholder";
+    placeholder.style.height = "32px";
 
     function cleanupPlaceholder() {
       const existing = dragZone.querySelector(".drag-placeholder");
@@ -196,9 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dragged = null;
         cleanupPlaceholder();
         dragZone.classList.remove("dragover");
-        dragZone.querySelectorAll(".draggable").forEach((d) =>
-          d.classList.remove("drag-target")
-        );
       });
     });
 
@@ -214,10 +218,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const box = target.getBoundingClientRect();
         const midpoint = box.top + box.height / 2;
 
-        target.classList.remove("drag-target");
         if (e.clientY < midpoint) {
           dragZone.insertBefore(placeholder, target);
-          target.classList.add("drag-target"); // highlight
           placed = true;
           break;
         }
@@ -228,22 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    dragZone.addEventListener("dragleave", (e) => {
-      if (!dragZone.contains(e.relatedTarget)) {
-        dragZone.classList.remove("dragover");
-        cleanupPlaceholder();
-        dragZone.querySelectorAll(".draggable").forEach((d) =>
-          d.classList.remove("drag-target")
-        );
-      }
-    });
-
     dragZone.addEventListener("drop", (e) => {
       e.preventDefault();
-      dragZone.classList.remove("dragover");
-      dragZone.querySelectorAll(".draggable").forEach((d) =>
-        d.classList.remove("drag-target")
-      );
       if (dragged) {
         if (placeholder.parentNode) {
           dragZone.insertBefore(dragged, placeholder);
@@ -252,6 +240,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
       cleanupPlaceholder();
+    });
+
+    dragZone.addEventListener("dragleave", (e) => {
+      if (!dragZone.contains(e.relatedTarget)) {
+        cleanupPlaceholder();
+        dragZone.classList.remove("dragover");
+      }
     });
   }
 
