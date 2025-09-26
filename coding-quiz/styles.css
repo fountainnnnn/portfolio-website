@@ -207,7 +207,7 @@ label {
   text-align: left;
 }
 .blank:empty::before {
-  content: "____";
+  content: "";
   color: #9ca3af;
 }
 .blank:focus {
