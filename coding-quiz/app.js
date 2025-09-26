@@ -1,7 +1,6 @@
 // Backend API (FastAPI running locally)
 const BACKEND_BASE_URL =
-  new URLSearchParams(location.search).get("api") ||
-  "https://crystallizedcrust-coding-quiz.hf.space";
+  new URLSearchParams(location.search).get("api") || "https://crystallizedcrust-coding-quiz.hf.space";
 
 document.addEventListener("DOMContentLoaded", () => {
   const setupCard = document.getElementById("setup-card");
@@ -23,12 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const scoreText = document.getElementById("score-text");
   const restartBtn = document.getElementById("restart-btn");
 
+  // Loading overlay
   const loadingOverlay = document.getElementById("loading-overlay");
 
   let sessionId = null;
   let questions = [];
   let currentIndex = 0;
-  let locked = false;
+  let score = 0;
+  let locked = false; // prevent multiple answers after correct
 
   // Load quiz
   async function loadQuiz(language, topic, difficulty, numQuestions) {
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionId = data.session_id;
       questions = data.questions;
       currentIndex = 0;
+      score = 0;
 
       setupCard.classList.add("hidden");
       quizContainer.classList.remove("hidden");
@@ -73,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const q = questions[currentIndex];
 
+    // Reset UI
     locked = false;
     feedbackEl.classList.add("hidden");
     feedbackEl.textContent = "";
@@ -82,8 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
     dragZone.classList.add("hidden");
     dragActions.classList.add("hidden");
 
+    // Render question text with numbering
     questionText.textContent = `Q${currentIndex + 1}/${questions.length}: ${q.question || ""}`;
 
+    // Fill-in-the-blank
     if (q.type === "fill_code" && q.code_with_blanks) {
       const codeHTML = q.code_with_blanks.replace(/___/g, () => {
         return `<span class="blank" contenteditable="true" data-blank></span>`;
@@ -103,7 +108,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
       optionsDiv.appendChild(submitBtn);
-    } else if (q.type === "mcq" && Array.isArray(q.options)) {
+
+      // Auto-expand blanks
+      codeBlock.querySelectorAll("[data-blank]").forEach((el) => {
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            submitBtn.click();
+          }
+        });
+
+        const resize = () => {
+          const span = document.createElement("span");
+          span.style.visibility = "hidden";
+          span.style.position = "absolute";
+          span.style.whiteSpace = "pre";
+          span.style.font = getComputedStyle(el).font;
+          span.textContent = el.textContent || "___";
+          document.body.appendChild(span);
+          el.style.width = span.offsetWidth + 20 + "px";
+          span.remove();
+        };
+        el.addEventListener("input", resize);
+        resize();
+      });
+    }
+    // Multiple choice
+    else if (q.type === "mcq" && Array.isArray(q.options)) {
       if (q.code_with_blanks) {
         codeBlock.textContent = q.code_with_blanks;
         codeBlock.classList.remove("hidden");
@@ -117,7 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         optionsDiv.appendChild(btn);
       });
-    } else if (q.type === "drag_drop" && Array.isArray(q.options)) {
+    }
+    // Drag and drop
+    else if (q.type === "drag_drop" && Array.isArray(q.options)) {
       dragZone.classList.remove("hidden");
       dragActions.classList.remove("hidden");
 
@@ -142,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Drag & drop support
   function enableDragAndDrop() {
     let dragged = null;
     let placeholder = document.createElement("div");
@@ -162,6 +196,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dragged = null;
         cleanupPlaceholder();
         dragZone.classList.remove("dragover");
+        dragZone.querySelectorAll(".draggable").forEach((d) =>
+          d.classList.remove("drag-target")
+        );
       });
     });
 
@@ -175,9 +212,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (const target of draggables) {
         const box = target.getBoundingClientRect();
-        const offset = e.clientX - box.left;
-        if (offset < box.width * 0.7) {
+        const midpoint = box.top + box.height / 2;
+
+        target.classList.remove("drag-target");
+        if (e.clientY < midpoint) {
           dragZone.insertBefore(placeholder, target);
+          target.classList.add("drag-target"); // highlight
           placed = true;
           break;
         }
@@ -192,12 +232,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!dragZone.contains(e.relatedTarget)) {
         dragZone.classList.remove("dragover");
         cleanupPlaceholder();
+        dragZone.querySelectorAll(".draggable").forEach((d) =>
+          d.classList.remove("drag-target")
+        );
       }
     });
 
     dragZone.addEventListener("drop", (e) => {
       e.preventDefault();
       dragZone.classList.remove("dragover");
+      dragZone.querySelectorAll(".draggable").forEach((d) =>
+        d.classList.remove("drag-target")
+      );
       if (dragged) {
         if (placeholder.parentNode) {
           dragZone.insertBefore(dragged, placeholder);
@@ -230,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const correct = data.correct;
       if (correct) {
+        score++;
         locked = true;
         if (clickedBtn) clickedBtn.classList.add("correct");
         feedbackEl.classList.remove("hidden");
@@ -253,32 +300,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Results (now calls /end_quiz)
-  async function showResults() {
+  // Results
+  function showResults() {
     quizContainer.classList.add("hidden");
     resultCard.classList.remove("hidden");
-
-    try {
-      const res = await fetch(`${BACKEND_BASE_URL}/end_quiz`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId }),
-      });
-
-      const data = await res.json();
-      if (!res.ok || data.status !== "ok") {
-        throw new Error(data.detail || data.message || "Failed to end quiz");
-      }
-
-      const total = data.score.total_questions;
-      const wrongFirst = data.score.wrong_first_try;
-      const correctFirst = total - wrongFirst;
-
-      scoreText.textContent = `You got ${correctFirst} / ${total} correct on the first try.`;
-    } catch (err) {
-      console.error("End quiz error:", err);
-      scoreText.textContent = `Error ending quiz: ${err.message}`;
-    }
+    scoreText.textContent = `You scored ${score} out of ${questions.length} questions.`;
   }
 
   // Events
@@ -297,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Typewriter animation
+// Typewriter animation for hero
 document.addEventListener("DOMContentLoaded", () => {
   const text = "AI Generated Coding Quiz";
   const el = document.getElementById("hero-typer");
@@ -322,6 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
   typeLoop();
 });
 
+// Init AOS animations
 document.addEventListener("DOMContentLoaded", () => {
   if (window.AOS) {
     AOS.init({
@@ -329,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
       duration: 300,
       easing: "ease-out",
       mirror: false,
-      anchorPlacement: "top-bottom",
+      anchorPlacement: "top-bottom"
     });
   }
 });
