@@ -199,6 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Drag & drop support
   function enableDragAndDrop() {
     let dragged = null;
+    let touchClone = null;
     const placeholder = document.createElement("div");
     placeholder.className = "drag-placeholder";
     placeholder.style.height = "32px";
@@ -229,6 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ).element;
     }
 
+    // ---- Desktop drag ----
     dragZone.querySelectorAll(".draggable").forEach((el) => {
       el.addEventListener("dragstart", (e) => {
         dragged = el;
@@ -245,20 +247,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (placeholder.parentNode) placeholder.remove();
         dragZone.classList.remove("dragover");
       });
-
-      // Prevent text highlight on touchstart
-      el.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-      }, { passive: false });
     });
 
     dragZone.addEventListener("dragover", (e) => {
       e.preventDefault();
       dragZone.classList.add("dragover");
       const afterEl = getDragAfterElement(dragZone, e.clientY);
-      if (!placeholder.parentNode) {
-        dragZone.appendChild(placeholder);
-      }
+      if (!placeholder.parentNode) dragZone.appendChild(placeholder);
       if (afterEl == null) {
         dragZone.appendChild(placeholder);
       } else {
@@ -285,6 +280,52 @@ document.addEventListener("DOMContentLoaded", () => {
         if (placeholder.parentNode) placeholder.remove();
         dragZone.classList.remove("dragover");
       }
+    });
+
+    // ---- Mobile touch simulation ----
+    dragZone.querySelectorAll(".draggable").forEach((el) => {
+      el.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        dragged = el;
+        touchClone = el.cloneNode(true);
+        touchClone.style.position = "absolute";
+        touchClone.style.pointerEvents = "none";
+        touchClone.style.opacity = "0.7";
+        touchClone.style.zIndex = "1000";
+        document.body.appendChild(touchClone);
+      }, { passive: false });
+
+      el.addEventListener("touchmove", (e) => {
+        if (!touchClone) return;
+        const touch = e.touches[0];
+        touchClone.style.left = touch.pageX - touchClone.offsetWidth / 2 + "px";
+        touchClone.style.top = touch.pageY - touchClone.offsetHeight / 2 + "px";
+
+        const afterEl = getDragAfterElement(dragZone, touch.clientY);
+        if (!placeholder.parentNode) dragZone.appendChild(placeholder);
+        if (afterEl == null) {
+          dragZone.appendChild(placeholder);
+        } else {
+          dragZone.insertBefore(placeholder, afterEl);
+        }
+      }, { passive: false });
+
+      el.addEventListener("touchend", () => {
+        if (touchClone) {
+          touchClone.remove();
+          touchClone = null;
+        }
+        if (dragged) {
+          if (placeholder.parentNode) {
+            dragZone.insertBefore(dragged, placeholder);
+          } else {
+            dragZone.appendChild(dragged);
+          }
+        }
+        dragged = null;
+        if (placeholder.parentNode) placeholder.remove();
+        dragZone.classList.remove("dragover");
+      });
     });
   }
 
