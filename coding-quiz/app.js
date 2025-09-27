@@ -174,6 +174,12 @@ document.addEventListener("DOMContentLoaded", () => {
         el.className = "draggable";
         el.draggable = true;
         el.textContent = opt;
+
+        // Prevent highlighting/callout on mobile
+        el.style.userSelect = "none";
+        el.style.webkitUserSelect = "none";
+        el.style.webkitTouchCallout = "none";
+
         dragZone.appendChild(el);
       });
 
@@ -239,6 +245,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (placeholder.parentNode) placeholder.remove();
         dragZone.classList.remove("dragover");
       });
+
+      // Prevent text highlight on touchstart
+      el.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+      }, { passive: false });
     });
 
     dragZone.addEventListener("dragover", (e) => {
