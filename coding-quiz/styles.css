@@ -36,17 +36,6 @@ body {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.3s ease;
 }
-@media (max-width: 768px) {
-  .navbar {
-    position: relative;
-    top: 0;
-    margin: 0;
-    width: 100%;
-    border-radius: 0;
-    box-shadow: none;
-    font-size: 1rem;
-  }
-}
 
 /* HERO */
 .hero-section {
@@ -421,4 +410,31 @@ label {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  /* Shrink text on mobile */
+  html { font-size: 16px; }
+
+  .navbar { font-size: 1rem; margin: 0; width: 100%; border-radius: 0; }
+  .section-title { font-size: 2rem;  }
+  .section p { font-size: 1rem; }
+
+  .hero-container {
+    margin-top: 30px;
+  }
+  .project-text h3 { font-size: 1.4rem; }
+  .project-text p { font-size: 0.9rem; }
+
+  .skill p { font-size: 0.9rem; }
+  .site-footer { font-size: 0.9rem; }
+
+  /* === Navbar + Hero together = 100vh === */
+  .hero-section {
+    min-height: calc(100vh - var(--navbar-height, 60px));
+    padding-top: 0;
+  }
+  .navbar {
+    --navbar-height: 60px; /* adjust if your mobile navbar is taller/shorter */
+  }
 }

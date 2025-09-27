@@ -38,17 +38,7 @@ body {
               0 2px 6px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.3s ease;
 }
-@media (max-width: 768px) {
-  .navbar {
-    position: relative;
-    top: 0;
-    margin: 0;
-    width: 100%;
-    border-radius: 0;
-    box-shadow: none;
-    font-size: 1rem;
-  }
-}
+
 
 /* ====== SECTIONS ====== */
 .section {
@@ -183,14 +173,14 @@ body {
   border-color: var(--accent) !important;
 }
 
-/* ====== CONTACT + FOOTER WRAPPER ====== */
+/* ====== CONTACT + FOOTER ====== */
 .contact-footer-wrapper {
   min-height: 100vh;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   scroll-snap-align: start;
 }
+
 #faq {
   flex: 1;
   display: flex;
@@ -199,12 +189,39 @@ body {
   padding: 40px 0;
   min-height: 0;
 }
+
 .site-footer {
-  flex: 0 0 auto;
+  flex: 0 0 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0;
   font-size: 1.1rem;
-  height: 5vh;
+}
+
+@media (max-width: 768px) {
+  /* Shrink text on mobile */
+  html { font-size: 16px; }
+
+  .navbar { font-size: 1rem; margin: 0; width: 100%; border-radius: 0; }
+  .section-title { font-size: 2rem;  }
+  .section p { font-size: 1rem; }
+
+  .hero-container {
+    margin-top: 30px;
+  }
+  .project-text h3 { font-size: 1.4rem; }
+  .project-text p { font-size: 0.9rem; }
+
+  .skill p { font-size: 0.9rem; }
+  .site-footer { font-size: 0.9rem; }
+
+  /* === Navbar + Hero together = 100vh === */
+  .hero-section {
+    min-height: calc(100vh - var(--navbar-height, 60px));
+    padding-top: 0;
+  }
+  .navbar {
+    --navbar-height: 60px; /* adjust if your mobile navbar is taller/shorter */
+  }
 }

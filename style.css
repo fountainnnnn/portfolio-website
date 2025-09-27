@@ -24,17 +24,6 @@ body { margin: 0; padding: 0; height: 100%; }
   transition: all 0.3s ease;
 }
 
-/* Mobile: stick at the very top, full width */
-@media (max-width: 768px) {
-  .navbar {
-    position: relative;   /* just flows at top */
-    top: 0;
-    margin: 0;
-    width: 100%;
-    border-radius: 0;
-    box-shadow: none;     /* optional: remove shadow for flat look */
-  }
-}
 
 
 /* ====== SECTIONS ====== */
@@ -190,15 +179,17 @@ body { margin: 0; padding: 0; height: 100%; }
 }
 
 /* ====== RESPONSIVE ====== */
-/* ====== RESPONSIVE ====== */
 @media (max-width: 768px) {
   /* Shrink text on mobile */
   html { font-size: 16px; }
 
   .navbar { font-size: 1rem; margin: 0; width: 100%; border-radius: 0; }
-  .section-title { font-size: 2rem; }
+  .section-title { font-size: 2rem;  }
   .section p { font-size: 1rem; }
 
+  .hero-container {
+    margin-top: 30px;
+  }
   .project-text h3 { font-size: 1.4rem; }
   .project-text p { font-size: 0.9rem; }
 
