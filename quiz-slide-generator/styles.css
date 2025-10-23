@@ -4,7 +4,6 @@ html {
   padding: 0;
   font-size: 20px;
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
   overflow-y: auto;
   height: 100%;
 }
@@ -44,7 +43,7 @@ body {
 .section {
   min-height: 100vh;
   height: 100vh;
-  scroll-snap-align: start;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -178,7 +177,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  scroll-snap-align: start;
+  
 }
 
 #faq {

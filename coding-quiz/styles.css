@@ -4,7 +4,6 @@ html {
   padding: 0;
   font-size: 20px;
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
   overflow-y: auto;
 }
 body {
@@ -41,7 +40,7 @@ body {
 .hero-section {
   min-height: 100vh; /* only hero is full viewport */
   text-align: center;
-  scroll-snap-align: start;
+  
 }
 #hero h1 {
   font-size: clamp(3rem, 8vw, 5rem);
@@ -84,7 +83,7 @@ body {
   justify-content: center;    /* horizontal centering */
   padding-top: 80px;          /* still clear the navbar */
   padding-bottom: 80px;
-  scroll-snap-align: start;
+  
 }
 
 /* Quiz cards (COMPACT) */
@@ -360,7 +359,7 @@ label {
 
 /* FAQ + Footer wrapper */
 .contact-footer-wrapper {
-  scroll-snap-align: start;
+  
   min-height: 100vh;        /* one snap section */
   display: flex;
   flex-direction: column;
