@@ -8,15 +8,10 @@
   <link rel="stylesheet" href="style.css">
   <link rel="shortcut icon" href="img/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="img/logo.png">
-
-
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <script src="speed-insights.js" defer></script>
 </head>
 <body>
-
-  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">Mervin's Hub</a>
@@ -34,8 +29,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- HERO -->
   <section id="hero" class="section d-flex align-items-center">
     <div class="container hero-container">
       <div class="row align-items-center gx-5">
@@ -45,7 +38,6 @@
           <p class="text-muted mb-3" style="font-size: 0.9rem;">
             <i class="bi bi-geo-alt-fill me-1"></i> Singapore, Singapore
           </p>
-
           <div class="d-flex flex-md-row flex-column justify-content-center justify-content-md-start gap-3 mt-3">
             <a href="#projects" class="btn btn-outline-dark d-flex align-items-center justify-content-center">
               My Projects <i class="bi bi-collection ms-2"></i>
@@ -54,7 +46,6 @@
               Download CV <i class="bi bi-arrow-down-circle ms-2"></i>
             </a>
           </div>
-
           <div class="d-flex justify-content-md-start justify-content-center gap-4 mt-4">
             <a href="https://github.com/fountainnnnn" target="_blank">
               <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="height:40px; width:auto;">
@@ -70,114 +61,95 @@
       </div>
     </div>
   </section>
-
-  <!-- ABOUT -->
   <section id="about" class="section bg-light">
     <div class="container about-container">
       <div class="row">
         <div class="col-md-12">
           <h2 class="section-title">About Me</h2>
           <p class="text-center">
-            Hello, I'm Yu Hang, though most people know me as Mervin. I'm an 18-year-old student at Singapore Polytechnic,
-            pursuing a Diploma in Applied AI & Analytics. From a young age, I've been fascinated by computers and technology,
-            and this passion has grown into a strong interest in building AI tools and full-stack applications with AI integration.
-            My goal is to one day create a groundbreaking application that impacts millions of people worldwide.
+            Hello, I'm Yu Hang, though most people know me as Mervin. I'm an 18-year-old student at Singapore Polytechnic, pursuing a Diploma in Applied AI & Analytics. From a young age, I've been fascinated by computers and technology, and this passion has grown into a strong interest in building AI tools and full-stack applications with AI integration. My goal is to one day create a groundbreaking application that impacts millions of people worldwide.
           </p>
         </div>
       </div>
     </div>
   </section>
-
   <!-- PROJECTS -->
   <section id="projects">
-    <h2 class="section-title text-center my-5">Projects</h2>
+    <div class="container">
+      <h2 class="section-title text-center">Projects</h2>
+      <div class="projects-grid">
 
-    <div class="project-section">
-      <div class="container">
-        <div class="row align-items-center g-5">
-          <div class="col-md-6 project-media">
-            <img src="img/Quiz Generator.png" alt="Project 1" class="img-fluid shadow">
+        <article class="project-card" onclick="window.open('https://ngyuhang.com/quiz-slide-generator','_blank')">
+          <div class="project-card-thumb">
+            <img src="img/Quiz Generator.png" alt="Quiz Slide Deck Generator screenshot">
           </div>
-          <div class="col-md-6 project-text pt-3">
+          <div class="project-card-body">
             <h3>Quiz Slide Deck Generator</h3>
-            <p>A full-stack FastAPI application that transforms PDFs/DOCX into structured mock exam papers and answer keys. Integrates OCR + NLP (LLMs) for text extraction and question generation, and uses ReportLab for professional PDF formatting with math rendering, tables, and MCQs. Designed to help students and educators generate practice materials quickly and consistently.</p>
-            <div class="project-stack" aria-label="Technologies used">
+            <p>Transforms PDFs/DOCX into AI-generated quiz slide decks with OCR + LLM question generation and PPTX output.</p>
+            <div class="project-stack" aria-label="Technologies">
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</span>
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="">FastAPI</span>
-              <span class="stack-chip"><i class="bi bi-stars" aria-hidden="true"></i>OpenAI</span>
-              <span class="stack-chip"><i class="bi bi-filetype-pptx" aria-hidden="true"></i>PPTX</span>
+              <span class="stack-chip"><i class="bi bi-stars"></i>OpenAI</span>
+              <span class="stack-chip"><i class="bi bi-filetype-pptx"></i>PPTX</span>
             </div>
-            <a href="https://ngyuhang.com/quiz-slide-generator" target="_blank" class="btn btn-outline-dark mt-3">Try it out!</a>
           </div>
-        </div>
-      </div>
-    </div>
+        </article>
 
-    <div class="project-section bg-light">
-      <div class="container">
-        <div class="row align-items-center flex-md-row-reverse g-5">
-          <div class="col-md-6 project-media">
-            <img src="img/Mock Paper Generator.png" alt="Project 2" class="img-fluid shadow">
+        <article class="project-card" onclick="window.open('https://ngyuhang.com/mock-paper-generator','_blank')">
+          <div class="project-card-thumb">
+            <img src="img/Mock Paper Generator.png" alt="Mock Paper Generator screenshot">
           </div>
-          <div class="col-md-6 project-text pt-3">
+          <div class="project-card-body">
             <h3>Mock Paper Generator</h3>
-            <p>A full-stack FastAPI application that transforms PDFs/DOCX into structured mock exam papers and answer keys. Integrates OCR + NLP (LLMs) for text extraction and question generation, and uses ReportLab for professional PDF formatting with math rendering, tables, and MCQs. Designed to help students and educators generate practice materials quickly and consistently.</p>
-            <div class="project-stack" aria-label="Technologies used">
+            <p>Converts study materials into formatted exam papers with answer keys, using OCR + LLMs and ReportLab PDF rendering.</p>
+            <div class="project-stack" aria-label="Technologies">
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</span>
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="">FastAPI</span>
-              <span class="stack-chip"><i class="bi bi-stars" aria-hidden="true"></i>OpenAI</span>
-              <span class="stack-chip"><i class="bi bi-filetype-pdf" aria-hidden="true"></i>ReportLab</span>
+              <span class="stack-chip"><i class="bi bi-stars"></i>OpenAI</span>
+              <span class="stack-chip"><i class="bi bi-filetype-pdf"></i>ReportLab</span>
             </div>
-            <a href="https://ngyuhang.com/mock-paper-generator" target="_blank" class="btn btn-outline-dark mt-3">Try it out!</a>
           </div>
-        </div>
-      </div>
-    </div>
+        </article>
 
-    <div class="project-section">
-      <div class="container">
-        <div class="row align-items-center g-5">
-          <div class="col-md-6 project-media">
-            <img src="img/Chat Assistant.png" alt="Project 3" class="img-fluid shadow">
+        <article class="project-card" onclick="window.open('https://ngyuhang.com/file-chat-assistant','_blank')">
+          <div class="project-card-thumb">
+            <img src="img/Chat Assistant.png" alt="Document Q&A Chat Assistant screenshot">
           </div>
-          <div class="col-md-6 project-text pt-3">
+          <div class="project-card-body">
             <h3>Document Q&A Chat Assistant</h3>
-            <p>A full-stack app that lets users upload PDF/DOCX/TXT files and query them instantly with LangChain + OpenAI. FastAPI backend with session-based QA, Bootstrap frontend with chat UI and typing indicators, deployed on Hugging Face Spaces.</p>
-            <div class="project-stack" aria-label="Technologies used">
+            <p>Upload PDF/DOCX/TXT files and query them with LangChain + OpenAI. FastAPI backend with session-based chat UI.</p>
+            <div class="project-stack" aria-label="Technologies">
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</span>
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="">FastAPI</span>
-              <span class="stack-chip"><i class="bi bi-link-45deg" aria-hidden="true"></i>LangChain</span>
-              <span class="stack-chip"><i class="bi bi-stars" aria-hidden="true"></i>OpenAI</span>
-              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="">Bootstrap</span>
+              <span class="stack-chip"><i class="bi bi-link-45deg"></i>LangChain</span>
+              <span class="stack-chip"><i class="bi bi-stars"></i>OpenAI</span>
             </div>
-            <a href="https://ngyuhang.com/file-chat-assistant" target="_blank" class="btn btn-outline-dark mt-3">Try it out!</a>
           </div>
-        </div>
-      </div>
-    </div>
+        </article>
 
-    <div class="project-section bg-light">
-      <div class="container">
-        <div class="row align-items-center flex-md-row-reverse g-5">
-          <div class="col-md-6 project-media">
-            <img src="img/coding quiz.png" alt="Project 4" class="img-fluid shadow">
+        <article class="project-card" onclick="window.open('https://ngyuhang.com/coding-quiz','_blank')">
+          <div class="project-card-thumb">
+            <img src="img/coding quiz.png" alt="Coding Quiz screenshot">
           </div>
-          <div class="col-md-6 project-text pt-3">
-            <h3>AI Generated Coding Quiz</h3>
-            <p>A full-stack app that automatically generates coding quizzes from selected topics and difficulty levels. Built with a FastAPI backend that integrates OpenAI for question generation and LangChain-inspired parsing logic, it supports multiple question types (MCQ, fill-in-the-code, drag-drop), ensures balanced variety, and maintains session-based answer tracking with explanations.</p>
-            <div class="project-stack" aria-label="Technologies used">
+          <div class="project-card-body">
+            <h3>Coding Quiz</h3>
+            <p>Interactive multi-language coding quiz with randomized questions, real-time scoring, and a clean vanilla JS frontend.</p>
+            <div class="project-stack" aria-label="Technologies">
               <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">JavaScript</span>
-              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</span>
-              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="">FastAPI</span>
-              <span class="stack-chip"><i class="bi bi-stars" aria-hidden="true"></i>OpenAI</span>
-              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="">Bootstrap</span>
+              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">HTML5</span>
+              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="">CSS3</span>
             </div>
-            <a href="https://ngyuhang.com/coding-quiz" target="_blank" class="btn btn-outline-dark mt-3">Try it out!</a>
           </div>
-        </div>
+        </article>
+
+
+      </div>
+
+      <a href="#" class="view-more-link" id="projectsViewMore">View all projects <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
   </section>
+
 
   <!-- SKILLS -->
   <section id="skills" class="section">
@@ -225,186 +197,61 @@
     <div class="container certifications-container">
       <div class="certifications-heading text-center">
         <h2 class="section-title">Certifications</h2>
-        <p>Relevant certificates across AI, cloud, data, app building, and payment integrations.</p>
+        <p>Selected credentials across AI, cloud, LLMs, and more.</p>
       </div>
 
-      <div class="certifications-grid">
-        <a class="cert-card" href="certificates/IBM Artificial Intelligence Fundamentals.png">
-          <span class="cert-preview"><img src="certificates/IBM Artificial Intelligence Fundamentals.png" alt="IBM Artificial Intelligence Fundamentals certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-cpu"></i> AI Foundations</span>
-          </span>
-          <strong>IBM Artificial Intelligence Fundamentals</strong>
-        </a>
-        <a class="cert-card" href="certificates/IBM Introduction to Artificial Intelligence.jpg">
-          <span class="cert-preview"><img src="certificates/IBM Introduction to Artificial Intelligence.jpg" alt="Introduction to Artificial Intelligence certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-cpu"></i> AI Foundations</span>
-          </span>
-          <strong>Introduction to Artificial Intelligence</strong>
-        </a>
-        <a class="cert-card" href="certificates/IBM AI Ethics.jpg">
-          <span class="cert-preview"><img src="certificates/IBM AI Ethics.jpg" alt="AI Ethics certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-shield-check"></i> AI Ethics</span>
-          </span>
-          <strong>AI Ethics</strong>
-        </a>
-        <a class="cert-card" href="certificates/IBM Machine Learning and Deep Learning.jpg">
-          <span class="cert-preview"><img src="certificates/IBM Machine Learning and Deep Learning.jpg" alt="Machine Learning and Deep Learning certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-diagram-3"></i> ML + Deep Learning</span>
-          </span>
-          <strong>Machine Learning and Deep Learning</strong>
-        </a>
-        <a class="cert-card" href="certificates/IBM Natural Language Preprocessing and Computer Vision.jpg">
-          <span class="cert-preview"><img src="certificates/IBM Natural Language Preprocessing and Computer Vision.jpg" alt="Natural Language Processing and Computer Vision certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-image"></i> NLP + Vision</span>
-          </span>
-          <strong>Natural Language Processing and Computer Vision</strong>
-        </a>
-        <a class="cert-card" href="certificates/AIFundamentalsLanguageandVisioninAI_Badge20260505-31-yrjan8-1.png">
-          <span class="cert-preview"><img src="certificates/AIFundamentalsLanguageandVisioninAI_Badge20260505-31-yrjan8-1.png" alt="AI Fundamentals Language and Vision in AI certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-eye"></i> Language + Vision</span>
-          </span>
-          <strong>AI Fundamentals: Language and Vision in AI</strong>
-        </a>
-        <a class="cert-card" href="certificates/IBM Run AI Models with IBM Watson Studio.jpg">
-          <span class="cert-preview"><img src="certificates/IBM Run AI Models with IBM Watson Studio.jpg" alt="Run AI Models with IBM Watson Studio certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
-            <span class="cert-category"><i class="bi bi-hdd-network"></i> Watson Studio</span>
-          </span>
-          <strong>Run AI Models with IBM Watson Studio</strong>
-        </a>
-        <a class="cert-card" href="certificates/Generative AI Concepts.jpg">
-          <span class="cert-preview"><img src="certificates/Generative AI Concepts.jpg" alt="Generative AI Concepts certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-datacamp" title="DataCamp" aria-label="Issued by DataCamp">DC</span>
-            <span class="cert-category"><i class="bi bi-stars"></i> Generative AI</span>
-          </span>
-          <strong>Generative AI Concepts</strong>
-        </a>
-        <a class="cert-card" href="certificates/Understanding ChatGPT.jpg">
-          <span class="cert-preview"><img src="certificates/Understanding ChatGPT.jpg" alt="Understanding ChatGPT certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-datacamp" title="DataCamp" aria-label="Issued by DataCamp">DC</span>
-            <span class="cert-category"><i class="bi bi-chat-dots"></i> Generative AI</span>
-          </span>
-          <strong>Understanding ChatGPT</strong>
-        </a>
-        <a class="cert-card" href="certificates/Intro to Deep Learning.jpg">
-          <span class="cert-preview"><img src="certificates/Intro to Deep Learning.jpg" alt="Intro to Deep Learning certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-datacamp" title="DataCamp" aria-label="Issued by DataCamp">DC</span>
-            <span class="cert-category"><i class="bi bi-diagram-3"></i> Deep Learning</span>
-          </span>
-          <strong>Introduction to Deep Learning with Keras</strong>
-        </a>
-        <a class="cert-card" href="certificates/Introduction to Data Visualization with Plotly in Python.jpg">
-          <span class="cert-preview"><img src="certificates/Introduction to Data Visualization with Plotly in Python.jpg" alt="Introduction to Data Visualization with Plotly in Python certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-datacamp" title="DataCamp" aria-label="Issued by DataCamp">DC</span>
-            <span class="cert-category"><i class="bi bi-bar-chart"></i> Data Visualization</span>
-          </span>
-          <strong>Data Visualization with Plotly in Python</strong>
-        </a>
-        <a class="cert-card" href="certificates/NVIDIA Fundamentals of Deep Learning.jpg">
-          <span class="cert-preview"><img src="certificates/NVIDIA Fundamentals of Deep Learning.jpg" alt="NVIDIA Fundamentals of Deep Learning certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-nvidia" title="NVIDIA" aria-label="Issued by NVIDIA">NV</span>
-            <span class="cert-category"><i class="bi bi-gpu-card"></i> Deep Learning</span>
-          </span>
-          <strong>NVIDIA Fundamentals of Deep Learning</strong>
-        </a>
-        <a class="cert-card" href="certificates/Create Image Captioning Models.png">
-          <span class="cert-preview"><img src="certificates/Create Image Captioning Models.png" alt="Create Image Captioning Models certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-google" title="Google Cloud" aria-label="Issued by Google Cloud">G</span>
-            <span class="cert-category"><i class="bi bi-image"></i> Computer Vision</span>
-          </span>
-          <strong>Create Image Captioning Models</strong>
-        </a>
-        <a class="cert-card" href="certificates/Vector Search and Embeddings.png">
-          <span class="cert-preview"><img src="certificates/Vector Search and Embeddings.png" alt="Vector Search and Embeddings certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-google" title="Google Cloud" aria-label="Issued by Google Cloud">G</span>
-            <span class="cert-category"><i class="bi bi-search"></i> Retrieval</span>
-          </span>
-          <strong>Vector Search and Embeddings</strong>
-        </a>
-        <a class="cert-card" href="certificates/App Building with AppSheet.png">
-          <span class="cert-preview"><img src="certificates/App Building with AppSheet.png" alt="App Building with AppSheet certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-google" title="Google Cloud" aria-label="Issued by Google Cloud">G</span>
-            <span class="cert-category"><i class="bi bi-phone"></i> App Building</span>
-          </span>
-          <strong>App Building with AppSheet</strong>
-        </a>
-        <a class="cert-card" href="certificates/LoRA LLM Fine Tuning.jpg">
-          <span class="cert-preview"><img src="certificates/LoRA LLM Fine Tuning.jpg" alt="LLM Post Training Unit 1 certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-huggingface" title="Hugging Face Instructors" aria-label="Issued by Hugging Face Instructors">HF</span>
-            <span class="cert-category"><i class="bi bi-sliders"></i> LLMs</span>
-          </span>
-          <strong>LLM Post Training: Unit 1</strong>
-        </a>
-        <a class="cert-card" href="certificates/AI Trainer Cert.jpg">
-          <span class="cert-preview"><img src="certificates/AI Trainer Cert.jpg" alt="AI for Good Youth Student Facilitator certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-aisingapore" title="AI Singapore" aria-label="Issued by AI Singapore">AI</span>
-            <span class="cert-category"><i class="bi bi-person-check"></i> AI Training</span>
-          </span>
-          <strong>AI for Good (Youth) Student Facilitator</strong>
-        </a>
-        <a class="cert-card" href="certificates/AI for Good - Train the Trainer Programme.jpg">
-          <span class="cert-preview"><img src="certificates/AI for Good - Train the Trainer Programme.jpg" alt="AI for Good Youth Train the Trainer Programme certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-aisingapore" title="AI Singapore" aria-label="Issued by AI Singapore">AI</span>
-            <span class="cert-category"><i class="bi bi-mortarboard"></i> AI Training</span>
-          </span>
-          <strong>AI for Good (Youth) Train-the-Trainer Programme</strong>
-        </a>
-        <a class="cert-card" href="certificates/AWS Academy Graduate - AWS Academy Cloud Foundations.jpg">
-          <span class="cert-preview"><img src="certificates/AWS Academy Graduate - AWS Academy Cloud Foundations.jpg" alt="AWS Academy Cloud Foundations certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-aws" title="AWS Academy" aria-label="Issued by AWS Academy">AWS</span>
-            <span class="cert-category"><i class="bi bi-cloud"></i> Cloud</span>
-          </span>
-          <strong>AWS Academy Cloud Foundations</strong>
-        </a>
-        <a class="cert-card" href="certificates/eNETS Web Integration.jpg">
-          <span class="cert-preview"><img src="certificates/eNETS Web Integration.jpg" alt="eNETS Web Integration certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-nets" title="NETS" aria-label="Issued by NETS">NETS</span>
-            <span class="cert-category"><i class="bi bi-credit-card"></i> Payments</span>
-          </span>
-          <strong>eNETS Web Integration</strong>
-        </a>
-        <a class="cert-card" href="certificates/NETS QR Web Payment Integration.jpg">
-          <span class="cert-preview"><img src="certificates/NETS QR Web Payment Integration.jpg" alt="NETS QR Web Payment Integration certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-nets" title="NETS" aria-label="Issued by NETS">NETS</span>
-            <span class="cert-category"><i class="bi bi-qr-code"></i> Payments</span>
-          </span>
-          <strong>NETS QR Web Payment Integration</strong>
-        </a>
-        <a class="cert-card" href="certificates/NETS QR Mobile Payment Integration.jpg">
-          <span class="cert-preview"><img src="certificates/NETS QR Mobile Payment Integration.jpg" alt="NETS QR Mobile Payment Integration certificate preview"></span>
-          <span class="cert-meta">
-            <span class="cert-issuer cert-issuer-nets" title="NETS" aria-label="Issued by NETS">NETS</span>
-            <span class="cert-category"><i class="bi bi-phone-vibrate"></i> Payments</span>
-          </span>
-          <strong>NETS QR Mobile Payment Integration</strong>
-        </a>
+      <div class="certifications-showcase">
+        <div class="certifications-grid">
+          <a class="cert-card" href="certificates/NVIDIA Fundamentals of Deep Learning.jpg">
+            <span class="cert-preview"><img src="certificates/NVIDIA Fundamentals of Deep Learning.jpg" alt="NVIDIA Fundamentals of Deep Learning certificate preview"></span>
+            <span class="cert-meta">
+              <span class="cert-issuer cert-issuer-nvidia" title="NVIDIA" aria-label="Issued by NVIDIA">NVIDIA</span>
+              <span class="cert-category"><i class="bi bi-cpu"></i> Deep Learning</span>
+            </span>
+            <strong>Fundamentals of Deep Learning</strong>
+          </a>
+          <a class="cert-card" href="certificates/AWS Academy Graduate - AWS Academy Cloud Foundations.jpg">
+            <span class="cert-preview"><img src="certificates/AWS Academy Graduate - AWS Academy Cloud Foundations.jpg" alt="AWS Academy Cloud Foundations certificate preview"></span>
+            <span class="cert-meta">
+              <span class="cert-issuer cert-issuer-aws" title="AWS Academy" aria-label="Issued by AWS Academy">AWS</span>
+              <span class="cert-category"><i class="bi bi-cloud"></i> Cloud</span>
+            </span>
+            <strong>AWS Academy Cloud Foundations</strong>
+          </a>
+          <a class="cert-card" href="certificates/LoRA LLM Fine Tuning.jpg">
+            <span class="cert-preview"><img src="certificates/LoRA LLM Fine Tuning.jpg" alt="LoRA LLM Fine Tuning certificate preview"></span>
+            <span class="cert-meta">
+              <span class="cert-issuer cert-issuer-huggingface" title="Hugging Face" aria-label="Issued by Hugging Face">HF</span>
+              <span class="cert-category"><i class="bi bi-sliders"></i> LLMs</span>
+            </span>
+            <strong>LLM Post Training: Unit 1</strong>
+          </a>
+          <a class="cert-card" href="certificates/AIFundamentalsLanguageandVisioninAI_Badge20260505-31-yrjan8-1.png">
+            <span class="cert-preview"><img src="certificates/AIFundamentalsLanguageandVisioninAI_Badge20260505-31-yrjan8-1.png" alt="AI Fundamentals Language and Vision certificate preview"></span>
+            <span class="cert-meta">
+              <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
+              <span class="cert-category"><i class="bi bi-eye"></i> Vision & Language</span>
+            </span>
+            <strong>AI Fundamentals: Language and Vision</strong>
+          </a>
+          <a class="cert-card" href="certificates/AI Trainer Cert.jpg">
+            <span class="cert-preview"><img src="certificates/AI Trainer Cert.jpg" alt="AI Trainer certificate preview"></span>
+            <span class="cert-meta">
+              <span class="cert-issuer cert-issuer-aisingapore" title="AI Singapore" aria-label="Issued by AI Singapore">AI</span>
+              <span class="cert-category"><i class="bi bi-mortarboard"></i> AI Training</span>
+            </span>
+            <strong>AI Trainer Certificate</strong>
+          </a>
+          <a class="cert-card" href="certificates/IBM Artificial Intelligence Fundamentals.png">
+            <span class="cert-preview"><img src="certificates/IBM Artificial Intelligence Fundamentals.png" alt="IBM Artificial Intelligence Fundamentals certificate preview"></span>
+            <span class="cert-meta">
+              <span class="cert-issuer cert-issuer-ibm" title="IBM SkillsBuild" aria-label="Issued by IBM SkillsBuild">IBM</span>
+              <span class="cert-category"><i class="bi bi-cpu"></i> AI Foundations</span>
+            </span>
+            <strong>Artificial Intelligence Fundamentals</strong>
+          </a>
+        </div>
+        <a href="#" class="view-more-link" id="certsViewMore">View all certificates <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
   </section>
@@ -426,8 +273,6 @@
       </div>
     </div>
   </div>
-
-  <!-- CONTACT + FOOTER -->
 
   <div class="contact-footer-wrapper">
     <section id="contact" class="section">
@@ -455,19 +300,17 @@
 
     <footer class="site-footer footer-section bg-dark text-light py-4">
       <div class="container text-center">
-        <small>© 2025 Mervin Ng. All rights reserved.</small>
+        <small>&copy; 2025 Mervin Ng. All rights reserved.</small>
       </div>
     </footer>
   </div>
 
-  <!-- PORTFOLIO CHAT -->
   <div class="portfolio-chat" id="portfolioChat">
     <button class="chat-launcher" id="chatToggle" type="button" aria-label="Open chat with Mervin" aria-expanded="false" aria-controls="chatPanel">
       <svg class="chat-icon" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
       </svg>
     </button>
-
     <section class="chat-panel" id="chatPanel" aria-labelledby="chatTitle" aria-hidden="true">
       <header class="chat-header">
         <img class="chat-avatar" src="img/myself.png" alt="" aria-hidden="true">
@@ -479,14 +322,12 @@
           <i class="bi bi-x-lg" aria-hidden="true"></i>
         </button>
       </header>
-
       <div class="chat-messages" id="chatMessages" aria-live="polite">
         <div class="chat-row chat-row-assistant">
           <img class="chat-message-avatar" src="img/myself.png" alt="" aria-hidden="true">
           <article class="chat-message chat-message-assistant">Hey, I'm Mervin. Ask me about my projects, skills, or what I have been building.</article>
         </div>
       </div>
-
       <form class="chat-form" id="chatForm">
         <label class="visually-hidden" for="chatInput">Message Mervin</label>
         <textarea id="chatInput" rows="1" maxlength="500" placeholder="Ask about my work"></textarea>

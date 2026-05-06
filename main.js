@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll(".section");
-  const projects = document.querySelectorAll(".project-section");
+  const projectsSection = document.querySelector("#projects");
   const footer = document.querySelector("footer");
 
   // Snap targets: sections + projects + footer
-  const snapTargets = [...sections, ...projects, footer];
+  const snapTargets = [...sections, ...projectsSection ? [projectsSection] : [], footer];
 
   // Fade-in for sections + projects
   const fadeObserver = new IntersectionObserver((entries, obs) => {
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }, { threshold: 0.2 });
-  [...sections, ...projects].forEach(el => fadeObserver.observe(el));
+  [...sections, ...projectsSection ? [projectsSection] : []].forEach(el => fadeObserver.observe(el));
 
   let currentIndex = 0;
 
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }, { threshold: 0.6 });
-  [...sections, ...projects].forEach(el => activeObserver.observe(el));
+  [...sections, ...projectsSection ? [projectsSection] : []].forEach(el => activeObserver.observe(el));
 
   // Separate observer for footer
   if (footer) {
