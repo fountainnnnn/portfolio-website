@@ -1,0 +1,9 @@
+{
+  "name": "mervin-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "start": "node server.js"
+  }
+}
