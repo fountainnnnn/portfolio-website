@@ -2,10 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll(".section");
   const projectsSection = document.querySelector("#projects");
   const footer = document.querySelector("footer");
-  const navLinks = [...document.querySelectorAll(".nav-link[href^='#']")];
+  const navLinks = [...document.querySelectorAll(".nav-link")]
+    .filter(link => link.dataset.section || link.getAttribute("href")?.startsWith("#"));
   const navMenu = document.querySelector(".nav-menu");
   const navbarCollapse = document.getElementById("navbarNav");
   const navTrackedSections = [...sections, ...(projectsSection ? [projectsSection] : [])];
+  const getNavSectionId = (link) => link.dataset.section || link.getAttribute("href")?.slice(1);
 
   const updateNavIndicator = (activeLink = document.querySelector(".nav-link[aria-current='page']")) => {
     if (!navMenu) return;
@@ -34,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeLink = null;
 
     navLinks.forEach(link => {
-      const targetId = link.getAttribute("href")?.slice(1);
+      const targetId = getNavSectionId(link);
       if (targetId === sectionId) {
         link.setAttribute("aria-current", "page");
         activeLink = link;
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navLinks.forEach(link => {
     link.addEventListener("click", () => {
-      setActiveNav(link.getAttribute("href")?.slice(1));
+      setActiveNav(getNavSectionId(link));
 
       if (navbarCollapse?.classList.contains("show") && window.bootstrap?.Collapse) {
         window.bootstrap.Collapse.getOrCreateInstance(navbarCollapse).hide();
@@ -69,6 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", () => {
     requestAnimationFrame(() => updateNavIndicator());
   });
+
+  requestAnimationFrame(() => updateNavIndicator());
 
   // Snap targets: sections + projects + footer
   const snapTargets = [...sections, ...projectsSection ? [projectsSection] : [], footer];
@@ -187,44 +191,59 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       intro.classList.add("is-hiding");
+      document.documentElement.classList.remove("intro-active");
       document.body.classList.remove("intro-active");
+      startTypewriter();
 
       setTimeout(() => {
         intro.hidden = true;
-        startTypewriter();
       }, introFadeOutDuration);
     };
   })();
 
   if (intro) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const introDuration = prefersReducedMotion ? 1100 : 8400;
-    let introTimer = null;
+    const isIndexPath = !/\.[a-z0-9]+$/i.test(window.location.pathname) || /\/index\.html$/i.test(window.location.pathname);
+    const shouldPlayIntro = isIndexPath && !window.location.hash;
 
-    const cleanupIntroSkip = () => {
-      intro.removeEventListener("click", skipIntro);
-      document.removeEventListener("keydown", skipIntroWithKeyboard);
-    };
+    if (!shouldPlayIntro) {
+      intro.hidden = true;
+      document.documentElement.classList.remove("intro-active");
+      document.body.classList.remove("intro-active");
+      startTypewriter();
+    } else {
+      const introDuration = prefersReducedMotion ? 1100 : 8400;
+      let introTimer = null;
 
-    const skipIntro = () => {
-      clearTimeout(introTimer);
-      cleanupIntroSkip();
-      finishIntro();
-    };
+      const cleanupIntroSkip = () => {
+        intro.removeEventListener("click", skipIntro);
+        document.removeEventListener("keydown", skipIntroWithKeyboard);
+      };
 
-    const skipIntroWithKeyboard = (event) => {
-      if (!["Enter", " ", "Escape"].includes(event.key)) return;
-      skipIntro();
-    };
+      const skipIntro = () => {
+        clearTimeout(introTimer);
+        cleanupIntroSkip();
+        finishIntro();
+      };
 
-    requestAnimationFrame(() => intro.classList.add("is-playing"));
-    introTimer = setTimeout(() => {
-      cleanupIntroSkip();
-      finishIntro();
-    }, introDuration);
+      const skipIntroWithKeyboard = (event) => {
+        if (!["Enter", " ", "Escape"].includes(event.key)) return;
+        skipIntro();
+      };
 
-    intro.addEventListener("click", skipIntro);
-    document.addEventListener("keydown", skipIntroWithKeyboard);
+      intro.hidden = false;
+      document.documentElement.classList.add("intro-active");
+      document.body.classList.add("intro-active");
+
+      requestAnimationFrame(() => intro.classList.add("is-playing"));
+      introTimer = setTimeout(() => {
+        cleanupIntroSkip();
+        finishIntro();
+      }, introDuration);
+
+      intro.addEventListener("click", skipIntro);
+      document.addEventListener("keydown", skipIntroWithKeyboard);
+    }
   } else {
     startTypewriter();
   }
@@ -232,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Certificate preview modal
   const certModal = document.getElementById("certModal");
   const certModalImage = document.getElementById("certModalImage");
+  const certModalFrame = document.getElementById("certModalFrame");
   const certModalLabel = document.getElementById("certModalLabel");
 
   if (certModal && certModalImage && certModalLabel) {
@@ -241,6 +261,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearCertModal = () => {
       certModalImage.removeAttribute("src");
       certModalImage.alt = "";
+      certModalImage.hidden = false;
+
+      if (certModalFrame) {
+        certModalFrame.removeAttribute("src");
+        certModalFrame.hidden = true;
+      }
     };
 
     const openCertModal = () => {
@@ -288,8 +314,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!certSrc) return;
 
         certModalLabel.textContent = certTitle;
-        certModalImage.src = certSrc;
-        certModalImage.alt = `${certTitle} certificate`;
+
+        if (/\.pdf(?:$|[?#])/i.test(certSrc) && certModalFrame) {
+          certModalImage.hidden = true;
+          certModalFrame.hidden = false;
+          certModalFrame.src = certSrc;
+        } else {
+          certModalImage.hidden = false;
+          certModalImage.src = certSrc;
+          certModalImage.alt = `${certTitle} certificate`;
+        }
+
         openCertModal();
       });
     });

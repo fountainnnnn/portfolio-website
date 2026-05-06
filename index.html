@@ -14,8 +14,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <script src="speed-insights.js" defer></script>
 </head>
-<body class="intro-active">
-  <div class="site-intro" id="siteIntro" role="status" aria-live="polite" aria-label="Hello. I'm Mervin. An AI Full Stack Enthusiast. Welcome to my website.">
+<body>
+  <div class="site-intro" id="siteIntro" role="status" aria-live="polite" aria-label="Hello. I'm Mervin. An AI Full Stack Enthusiast. Welcome to my website." hidden>
     <div class="intro-stage">
       <p class="intro-line intro-line-hello">Hello! :D</p>
       <p class="intro-line intro-line-name">
@@ -35,9 +35,9 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav nav-menu">
           <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="projects.html" data-section="projects">Projects</a></li>
           <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="certificates.html" data-section="certifications">Certifications</a></li>
           <li class="nav-item"><a class="nav-link nav-link-cta" href="#contact">Contact</a></li>
         </ul>
       </div>
@@ -125,22 +125,6 @@
           </div>
         </article>
 
-        <article class="project-card" onclick="window.open('https://ngyuhang.com/file-chat-assistant','_blank')">
-          <div class="project-card-thumb">
-            <img src="img/Chat Assistant.png" alt="Document Q&A Chat Assistant screenshot">
-          </div>
-          <div class="project-card-body">
-            <h3>Document Q&A Chat Assistant</h3>
-            <p>Upload PDF/DOCX/TXT files and query them with LangChain + OpenAI. FastAPI backend with session-based chat UI.</p>
-            <div class="project-stack" aria-label="Technologies">
-              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</span>
-              <span class="stack-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="">FastAPI</span>
-              <span class="stack-chip"><i class="bi bi-link-45deg"></i>LangChain</span>
-              <span class="stack-chip"><i class="bi bi-stars"></i>OpenAI</span>
-            </div>
-          </div>
-        </article>
-
         <article class="project-card" onclick="window.open('https://ngyuhang.com/coding-quiz','_blank')">
           <div class="project-card-thumb">
             <img src="img/coding quiz.png" alt="Coding Quiz screenshot">
@@ -159,8 +143,7 @@
 
       </div>
 
-      <a href="#" class="view-more-link" id="projectsViewMore">View all projects <i class="bi bi-arrow-right"></i></a>
-      </div>
+      <a href="projects.html" class="view-more-link" id="projectsViewMore">View all projects <i class="bi bi-arrow-right"></i></a>
     </div>
   </section>
 
@@ -265,7 +248,7 @@
             <strong>Artificial Intelligence Fundamentals</strong>
           </a>
         </div>
-        <a href="#" class="view-more-link" id="certsViewMore">View all certificates <i class="bi bi-arrow-right"></i></a>
+        <a href="certificates.html" class="view-more-link" id="certsViewMore">View all certificates <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
   </section>
@@ -283,6 +266,7 @@
         </div>
         <div class="modal-body">
           <img id="certModalImage" src="" alt="">
+          <iframe id="certModalFrame" title="Certificate PDF preview" hidden></iframe>
         </div>
       </div>
     </div>
