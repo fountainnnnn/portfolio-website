@@ -2,6 +2,73 @@ document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll(".section");
   const projectsSection = document.querySelector("#projects");
   const footer = document.querySelector("footer");
+  const navLinks = [...document.querySelectorAll(".nav-link[href^='#']")];
+  const navMenu = document.querySelector(".nav-menu");
+  const navbarCollapse = document.getElementById("navbarNav");
+  const navTrackedSections = [...sections, ...(projectsSection ? [projectsSection] : [])];
+
+  const updateNavIndicator = (activeLink = document.querySelector(".nav-link[aria-current='page']")) => {
+    if (!navMenu) return;
+
+    if (!activeLink || !navMenu.contains(activeLink)) {
+      navMenu.style.setProperty("--nav-indicator-opacity", "0");
+      return;
+    }
+
+    const menuRect = navMenu.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+
+    if (linkRect.width === 0 || linkRect.height === 0) {
+      navMenu.style.setProperty("--nav-indicator-opacity", "0");
+      return;
+    }
+
+    navMenu.style.setProperty("--nav-indicator-x", `${linkRect.left - menuRect.left}px`);
+    navMenu.style.setProperty("--nav-indicator-y", `${linkRect.top - menuRect.top}px`);
+    navMenu.style.setProperty("--nav-indicator-width", `${linkRect.width}px`);
+    navMenu.style.setProperty("--nav-indicator-height", `${linkRect.height}px`);
+    navMenu.style.setProperty("--nav-indicator-opacity", "1");
+  };
+
+  const setActiveNav = (sectionId) => {
+    let activeLink = null;
+
+    navLinks.forEach(link => {
+      const targetId = link.getAttribute("href")?.slice(1);
+      if (targetId === sectionId) {
+        link.setAttribute("aria-current", "page");
+        activeLink = link;
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+
+    requestAnimationFrame(() => updateNavIndicator(activeLink));
+  };
+
+  const getCurrentSectionId = () => {
+    const marker = Math.min(window.innerHeight * 0.45, window.innerHeight - 1);
+    return navTrackedSections.find(section => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= marker && rect.bottom > marker;
+    })?.id || "";
+  };
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      setActiveNav(link.getAttribute("href")?.slice(1));
+
+      if (navbarCollapse?.classList.contains("show") && window.bootstrap?.Collapse) {
+        window.bootstrap.Collapse.getOrCreateInstance(navbarCollapse).hide();
+      }
+    });
+  });
+
+  navbarCollapse?.addEventListener("shown.bs.collapse", () => updateNavIndicator());
+
+  window.addEventListener("resize", () => {
+    requestAnimationFrame(() => updateNavIndicator());
+  });
 
   // Snap targets: sections + projects + footer
   const snapTargets = [...sections, ...projectsSection ? [projectsSection] : [], footer];
@@ -50,11 +117,25 @@ document.addEventListener("DOMContentLoaded", () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const idx = snapTargets.indexOf(entry.target);
-        if (idx !== -1) currentIndex = idx;
+        if (idx !== -1) {
+          currentIndex = idx;
+          setActiveNav(getCurrentSectionId() || entry.target.id);
+        }
       }
     });
   }, { threshold: 0.6 });
   [...sections, ...projectsSection ? [projectsSection] : []].forEach(el => activeObserver.observe(el));
+
+  let navScrollTicking = false;
+  window.addEventListener("scroll", () => {
+    if (navScrollTicking) return;
+
+    navScrollTicking = true;
+    requestAnimationFrame(() => {
+      setActiveNav(getCurrentSectionId());
+      navScrollTicking = false;
+    });
+  }, { passive: true });
 
   // Separate observer for footer
   if (footer) {
@@ -68,18 +149,85 @@ document.addEventListener("DOMContentLoaded", () => {
     footerObserver.observe(footer);
   }
 
-  // Typewriter effect
+  // Opening intro + typewriter effect
+  const intro = document.getElementById("siteIntro");
   const text = "Hi, I'm Ng Yu Hang (Mervin)";
   const target = document.getElementById("typewriter");
-  let i = 0;
-  function type() {
-    if (i < text.length) {
-      target.textContent += text.charAt(i);
-      i++;
-      setTimeout(type, 90);
-    }
+  let typewriterStarted = false;
+
+  const startTypewriter = () => {
+    if (!target || typewriterStarted) return;
+
+    typewriterStarted = true;
+    target.textContent = "";
+    let i = 0;
+
+    const type = () => {
+      if (i < text.length) {
+        target.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, 90);
+      }
+    };
+
+    type();
+  };
+
+  const finishIntro = (() => {
+    let isFinishing = false;
+    const introFadeOutDuration = 1850;
+
+    return () => {
+      if (isFinishing) return;
+      isFinishing = true;
+
+      if (!intro) {
+        startTypewriter();
+        return;
+      }
+
+      intro.classList.add("is-hiding");
+      document.body.classList.remove("intro-active");
+
+      setTimeout(() => {
+        intro.hidden = true;
+        startTypewriter();
+      }, introFadeOutDuration);
+    };
+  })();
+
+  if (intro) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const introDuration = prefersReducedMotion ? 1100 : 8400;
+    let introTimer = null;
+
+    const cleanupIntroSkip = () => {
+      intro.removeEventListener("click", skipIntro);
+      document.removeEventListener("keydown", skipIntroWithKeyboard);
+    };
+
+    const skipIntro = () => {
+      clearTimeout(introTimer);
+      cleanupIntroSkip();
+      finishIntro();
+    };
+
+    const skipIntroWithKeyboard = (event) => {
+      if (!["Enter", " ", "Escape"].includes(event.key)) return;
+      skipIntro();
+    };
+
+    requestAnimationFrame(() => intro.classList.add("is-playing"));
+    introTimer = setTimeout(() => {
+      cleanupIntroSkip();
+      finishIntro();
+    }, introDuration);
+
+    intro.addEventListener("click", skipIntro);
+    document.addEventListener("keydown", skipIntroWithKeyboard);
+  } else {
+    startTypewriter();
   }
-  type();
 
   // Certificate preview modal
   const certModal = document.getElementById("certModal");
